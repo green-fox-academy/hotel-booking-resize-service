@@ -2,16 +2,18 @@ package com.greenfox.malachit.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import javax.persistence.Entity;
 
 @Setter
 @Getter
-public class Heartbeat {
+@Entity
+public class Hearthbeat {
   private String status;
   private String database;
 
-  public Heartbeat() {}
+  public Hearthbeat() {}
 
-  public Heartbeat(String status, String database) {
+  public Hearthbeat(String status, String database) {
     this.status = status;
     this.database = database;
   }
