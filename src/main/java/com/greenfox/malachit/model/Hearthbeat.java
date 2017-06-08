@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class Hearthbeat {
+public class Hearthbeat{
   private String status;
   private String database;
 
