@@ -20,4 +20,6 @@ public class Hearthbeat {
     this.status = status;
     this.database = database;
   }
+
+
 }
