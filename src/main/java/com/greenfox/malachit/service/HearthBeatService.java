@@ -16,7 +16,7 @@ public class HearthBeatService {
   }
 
   public Hearthbeat healthStatus() {
-    if (healthCheckRepository.count() >= 1) {
+    if (healthCheckRepository.findAllByOrderById().size() >= 1) {
       return new Hearthbeat("ok", "ok");
     }
       return new Hearthbeat("ok", "error");
