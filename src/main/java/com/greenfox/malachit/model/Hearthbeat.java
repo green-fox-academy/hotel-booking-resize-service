@@ -13,6 +13,7 @@ public class Hearthbeat {
 
   public Hearthbeat() {
     this.status = "ok";
+    this.database = "ok";
   }
 
   public Hearthbeat(String status, String database) {
