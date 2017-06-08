@@ -1,0 +1,1 @@
+# hotel-booking-resize-service
