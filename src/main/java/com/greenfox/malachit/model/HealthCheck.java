@@ -19,4 +19,8 @@ public class HealthCheck {
   private boolean ok;
 
   public HealthCheck() {}
+
+  public HealthCheck(boolean ok) {
+    this.ok = ok;
+  }
 }
