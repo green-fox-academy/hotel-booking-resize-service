@@ -7,8 +7,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HeartbeatRestController {
 
-  @GetMapping("/hearthbeat")
+  @GetMapping("/")
+  public Hearthbeat indexHello() {
+    return new Hearthbeat("Hello", "Hello");
+  }
 
+  @GetMapping("/hearthbeat")
   public Hearthbeat healthCheck() {
     return new Hearthbeat("ok", "ok");
   }
