@@ -16,11 +16,11 @@ public class HealthCheck {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
-  private boolean ok;
+  private int ok;
 
   public HealthCheck() {}
 
-  public HealthCheck(boolean ok) {
+  public HealthCheck(int ok) {
     this.ok = ok;
   }
 }
