@@ -9,16 +9,16 @@ import lombok.Setter;
 @Getter
 public class Hearthbeat{
   private String status;
-  private String database;
+  private String datas;
 
   public Hearthbeat() {
     this.status = "ok";
-    this.database = "ok";
+    this.datas = "ok";
   }
 
   public Hearthbeat(String status, String database) {
     this.status = status;
-    this.database = database;
+    this.datas = database;
   }
 
 
