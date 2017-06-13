@@ -30,7 +30,7 @@ public class HearthbeatTest {
   @Test
   public void getHearthbeatOk() {
     ArrayList<HealthCheck> toReturn = new ArrayList<>();
-    toReturn.add(new HealthCheck(true));
+    toReturn.add(new HealthCheck(1));
     HealthCheckRepository mockedHealthCheckRepository = Mockito.mock(HealthCheckRepository.class);
     Mockito.when(mockedHealthCheckRepository.findAllByOrderById())
             .thenReturn(toReturn);

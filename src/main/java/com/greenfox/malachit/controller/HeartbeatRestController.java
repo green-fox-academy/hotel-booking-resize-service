@@ -22,7 +22,7 @@ public class HeartbeatRestController {
     return new Hearthbeat("Hello", "Hello");
   }
 
-  @GetMapping("/hearthbeat")
+  @GetMapping("/heartbeat")
   public Hearthbeat healthCheck() {
     return hearthBeatService.healthStatus();
   }
