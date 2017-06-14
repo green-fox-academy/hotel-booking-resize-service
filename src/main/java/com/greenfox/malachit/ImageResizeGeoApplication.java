@@ -19,6 +19,6 @@ public class ImageResizeGeoApplication implements CommandLineRunner{
 
   @Override
   public void run(String... args) throws Exception {
-    healthCheckRepository.save(new HealthCheck("ok"));
+    healthCheckRepository.save(new HealthCheck(1));
   }
 }

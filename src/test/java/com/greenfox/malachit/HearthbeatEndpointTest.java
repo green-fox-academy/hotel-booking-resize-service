@@ -39,12 +39,12 @@ public class HearthbeatEndpointTest {
   @Test
   public void getEndpointDatabaseOk() throws Exception {
     ArrayList<HealthCheck> toReturn = new ArrayList<>();
-    toReturn.add(new HealthCheck(true));
+    toReturn.add(new HealthCheck(1));
     BDDMockito.given(healthCheckRepository.findAllByOrderById())
             .willReturn(
                    toReturn
             );
-    mockMvc.perform(get("/hearthbeat")
+    mockMvc.perform(get("/heartbeat")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(contentType))
@@ -58,7 +58,7 @@ public class HearthbeatEndpointTest {
             .willReturn(
                     toReturn
             );
-    mockMvc.perform(get("/hearthbeat")
+    mockMvc.perform(get("/heartbeat")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(contentType))
