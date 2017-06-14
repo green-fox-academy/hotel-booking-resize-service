@@ -3,24 +3,24 @@ package com.greenfox.malachit.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @Setter
 @Entity
 public class HealthCheck {
 
+  //@Id
+  //@GeneratedValue(strategy = GenerationType.AUTO)
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private long id;
-  private boolean ok;
+  @Column(name="ok")
+  private String id;
+  //private long id;
+  //private boolean ok;
 
   public HealthCheck() {}
 
-  public HealthCheck(boolean ok) {
-    this.ok = ok;
+  public HealthCheck(String ok) {
+    this.id = ok;
   }
 }
