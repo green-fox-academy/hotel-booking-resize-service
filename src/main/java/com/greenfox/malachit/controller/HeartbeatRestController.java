@@ -21,13 +21,13 @@ public class HeartbeatRestController {
 
   @GetMapping("/")
   public Hearthbeat indexHello() {
-    logLine.printInfoLog("/ endpoint works well");
+//    logLine.printInfoLog("/ endpoint works well");
     return new Hearthbeat("Hello", "Hello");
   }
 
   @GetMapping("/heartbeat")
   public Hearthbeat healthCheck() {
-    logLine.printInfoLog("/heartbeat endpoint works well");
+//    logLine.printInfoLog("/heartbeat endpoint works well");
     return hearthBeatService.healthStatus();
   }
 }
