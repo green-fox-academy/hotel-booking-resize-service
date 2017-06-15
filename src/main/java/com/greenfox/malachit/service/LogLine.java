@@ -18,13 +18,13 @@ public class LogLine {
   }
 
   public void printInfoLog(String message) {
-    if (compareLevels(INFO)) {
+    if (isLevelValid(INFO)) {
       printLog(INFO, message);
     }
   }
 
   public void printWarnLog(String message) {
-    if (compareLevels(WARN)) {
+    if (isLevelValid(WARN)) {
       printLog(WARN, message);
     }
   }
@@ -34,7 +34,7 @@ public class LogLine {
   }
 
   public void printDebugLog(String message) {
-    if (compareLevels(DEBUG)) {
+    if (isLevelValid(DEBUG)) {
       printLog(DEBUG, message);
     }
   }
@@ -48,11 +48,27 @@ public class LogLine {
     }
   }
 
-  private boolean compareLevels(String envVar) {
-    if (levels.indexOf(System.getenv("HOTEL_APP_LOG_LEVEL")) >= levels.indexOf(envVar)) {
+  public boolean isLevelValid(String envVar) {
+    if (levels.contains(System.getenv("HOTEL_APP_LOG_LEVEL"))) {
+      return compareExistingLevels(envVar);
+    } else {
+      return isLevelBelowInfo(envVar);
+    }
+  }
+
+  public boolean compareExistingLevels(String envVar) {
+    if (levels.indexOf(System.getenv("HOTEL_APP_LOG_LEVEL")) <= levels.indexOf(envVar)) {
       return true;
     } else {
       return false;
+    }
+  }
+
+  public boolean isLevelBelowInfo(String envVar) {
+    if (envVar.equals(DEBUG)) {
+      return false;
+    } else {
+      return true;
     }
   }
 }
