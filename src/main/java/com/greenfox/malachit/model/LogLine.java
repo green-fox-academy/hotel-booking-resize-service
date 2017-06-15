@@ -1,9 +1,9 @@
 package com.greenfox.malachit.model;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Service
 public class LogLine {
@@ -53,7 +53,8 @@ public class LogLine {
   }
 
   private String createDate(){
-    return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.mm.dd hh:MM:ss"));
+    DateTime dateTime = new DateTime();
+    DateTimeFormatter fmt = ISODateTimeFormat.dateTimeNoMillis();
+    return fmt.print(dateTime);
   }
-
 }
