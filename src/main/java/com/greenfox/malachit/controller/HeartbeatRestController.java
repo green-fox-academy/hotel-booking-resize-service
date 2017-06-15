@@ -1,8 +1,8 @@
 package com.greenfox.malachit.controller;
 
 import com.greenfox.malachit.model.Hearthbeat;
-import com.greenfox.malachit.service.LogLine;
 import com.greenfox.malachit.service.HearthBeatService;
+import com.greenfox.malachit.service.LogLine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,7 +12,8 @@ public class HeartbeatRestController {
 
   private HearthBeatService hearthBeatService;
 
-  @Autowired LogLine logLine;
+  @Autowired
+  LogLine logLine;
 
   @Autowired
   public HeartbeatRestController(HearthBeatService hearthBeatService) {

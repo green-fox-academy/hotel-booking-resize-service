@@ -1,14 +1,11 @@
 package com.greenfox.malachit.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class LogLine {
-
-  @Autowired DateCreator dateCreator;
 
   private static final String APPNAME = "hotel-booking-resize-service.herokuapp.com";
   private static final String WARN = "WARN";
@@ -43,11 +40,11 @@ public class LogLine {
   }
 
   public void printLog(String level, String message) {
-    String log = level + " " + dateCreator.createDate() + " " + APPNAME + " " + message;
+    LogCreator logCreator = new LogCreator(level, new DateCreator().createDate(), message);
     if (levels.indexOf(level) > 1) {
-      System.err.println(log);
+      System.err.println(logCreator.getLog());
     } else {
-      System.out.println(log);
+      System.out.println(logCreator.getLog());
     }
   }
 
