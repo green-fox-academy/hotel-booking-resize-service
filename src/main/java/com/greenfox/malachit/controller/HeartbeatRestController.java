@@ -1,7 +1,7 @@
 package com.greenfox.malachit.controller;
 
 import com.greenfox.malachit.model.Hearthbeat;
-import com.greenfox.malachit.model.LogLine;
+import com.greenfox.malachit.service.LogLine;
 import com.greenfox.malachit.service.HearthBeatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
