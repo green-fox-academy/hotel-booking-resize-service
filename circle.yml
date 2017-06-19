@@ -1,13 +1,17 @@
- machine:
+deployment:
+  staging:
+    branch: master
+    heroku:
+      appname: hotel-booking-resize-service
+
+machine:
   java:
     version: oraclejdk8
+  environment:
+    DATABASE_URL: jdbc:mysql://localhost:3306/circle_test?user=ubuntu&password=
 
- dependencies:
+dependencies:
   override:
     - chmod +x gradlew
     - ./gradlew dependencies
 
- test:
-  override:
-    - chmod +x grailsw
-    - ./grailsw test-app --non-interactive
