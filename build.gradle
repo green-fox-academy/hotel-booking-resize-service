@@ -27,7 +27,6 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
     compile(group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25')
     compile(group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3')
-    //runtime('org.springframework.boot:spring-boot-devtools')
 	runtime('mysql:mysql-connector-java')
 	runtime('org.postgresql:postgresql')
 	compileOnly('org.projectlombok:lombok')
