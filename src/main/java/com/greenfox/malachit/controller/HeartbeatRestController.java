@@ -28,7 +28,7 @@ public class HeartbeatRestController {
 
   @GetMapping("/heartbeat")
   public Hearthbeat healthCheck() {
-    logger.error("asdasdasd");
+    logger.info("/heartbeat works as intended");
     return hearthBeatService.healthStatus();
   }
 }
