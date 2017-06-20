@@ -22,13 +22,13 @@ public class HeartbeatRestController {
 
   @GetMapping("/")
   public Hearthbeat indexHello() {
-    logger.info("/ works as intended");
+    logger.info("HTTP-REQUEST / works as intended");
     return new Hearthbeat("Hello", "Hello");
   }
 
   @GetMapping("/heartbeat")
   public Hearthbeat healthCheck() {
-    logger.info("/heartbeat works as intended");
+    logger.info("HTTP-REQUEST /heartbeat works as intended");
     return hearthBeatService.healthStatus();
   }
 }
