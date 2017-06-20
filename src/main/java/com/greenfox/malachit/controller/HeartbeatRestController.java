@@ -2,6 +2,7 @@ package com.greenfox.malachit.controller;
 
 import com.greenfox.malachit.model.Hearthbeat;
 import com.greenfox.malachit.service.HearthBeatService;
+import com.greenfox.malachit.service.MessageQueueService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ public class HeartbeatRestController {
 
   private Logger logger = LoggerFactory.getLogger(HeartbeatRestController.class);
   private HearthBeatService hearthBeatService;
+  private MessageQueueService messageQueueService = new MessageQueueService();
 
   @Autowired
   public HeartbeatRestController(HearthBeatService hearthBeatService) {
@@ -23,6 +25,10 @@ public class HeartbeatRestController {
   @GetMapping("/")
   public Hearthbeat indexHello() {
     logger.info("/ works as intended");
+    try {messageQueueService.sendMessage();
+    } catch (Exception e){
+      System.out.println(e.getClass());
+    }
     return new Hearthbeat("Hello", "Hello");
   }
 
