@@ -25,22 +25,12 @@ public class HeartbeatRestController {
   @GetMapping("/")
   public Hearthbeat indexHello() {
     logger.info("HTTP-REQUEST / works as intended");
-    try {
-      messageQueueService.sendMessage();
-    } catch (Exception e) {
-      logger.error("HTTP-ERROR / caused by:" + e.getMessage());
-    }
     return new Hearthbeat("Hello", "Hello", "Hello");
   }
 
   @GetMapping("/heartbeat")
-  public Hearthbeat healthCheck() {
+  public Hearthbeat healthCheck() throws Exception {
     logger.info("HTTP-REQUEST /heartbeat works as intended");
-    try {
-      messageQueueService.receiveMessage();
-    } catch (Exception e) {
-      logger.error("HTTP-ERROR / caused by:" + e.getMessage());
-    }
     return hearthBeatService.healthStatus();
   }
 }
