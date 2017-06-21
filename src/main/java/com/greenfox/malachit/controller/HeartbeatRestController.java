@@ -15,7 +15,6 @@ public class HeartbeatRestController {
 
   private Logger logger = LoggerFactory.getLogger(HeartbeatRestController.class);
   private HearthBeatService hearthBeatService;
-  private MessageQueueService messageQueueService = new MessageQueueService();
 
   @Autowired
   public HeartbeatRestController(HearthBeatService hearthBeatService) {
