@@ -30,7 +30,7 @@ public class HeartbeatRestController {
     } catch (Exception e) {
       logger.error("HTTP-ERROR / caused by:" + e.getMessage());
     }
-    return new Hearthbeat("Hello", "Hello");
+    return new Hearthbeat("Hello", "Hello", "Hello");
   }
 
   @GetMapping("/heartbeat")
