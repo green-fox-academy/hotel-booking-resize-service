@@ -27,7 +27,7 @@ machine:
       # Create a new test database.
       - sudo -u postgres psql -p 5433 -c "create database test;"
 
-    DATABASE_URL: jdbc:postgresql://localhost:5433/hotel?user=ubuntu&password=ubuntu
+    DATABASE_URL: jdbc:postgresql://localhost:5433/test?user=ubuntu&password=ubuntu
     # postgres://ubuntu:@127.0.0.1:5433/test
 
 dependencies:
