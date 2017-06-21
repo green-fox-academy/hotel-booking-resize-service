@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 public class HearthbeatTest {
 
   @Test
-  public void getHearthbeatError() throws Exception {
+  public void getHearthbeatDatabaseError() throws Exception {
     ArrayList<HealthCheck> toReturn = new ArrayList<>();
     HealthCheckRepository mockedHealthCheckRepository = Mockito.mock(HealthCheckRepository.class);
     MessageQueueService mockedMessageQueueService = Mockito.mock(MessageQueueService.class);
@@ -27,6 +27,26 @@ public class HearthbeatTest {
             .thenReturn(toReturn);
     HearthBeatService hearthBeatServiceUnderTest = new HearthBeatService(mockedHealthCheckRepository, mockedMessageQueueService);
     assertEquals(hearthBeatServiceUnderTest.healthStatus().getDatabase(), "error");
+  }
+
+  @Test
+  public void getHeartbeatMessagequeueError() throws Exception {
+    HealthCheckRepository mockedHealthCheckRepository = Mockito.mock(HealthCheckRepository.class);
+    MessageQueueService mockedMessageQueueService = Mockito.mock(MessageQueueService.class);
+    Mockito.when(mockedMessageQueueService.messagesInQueue())
+            .thenReturn(1);
+    HearthBeatService hearthBeatServiceUnderTest = new HearthBeatService(mockedHealthCheckRepository, mockedMessageQueueService);
+    assertEquals(hearthBeatServiceUnderTest.healthStatus().getQueue(), "error");
+  }
+
+  @Test
+  public void getHeartbeatMessagequeueOk() throws Exception {
+    HealthCheckRepository mockedHealthCheckRepository = Mockito.mock(HealthCheckRepository.class);
+    MessageQueueService mockedMessageQueueService = Mockito.mock(MessageQueueService.class);
+    Mockito.when(mockedMessageQueueService.messagesInQueue())
+            .thenReturn(0);
+    HearthBeatService hearthBeatServiceUnderTest = new HearthBeatService(mockedHealthCheckRepository, mockedMessageQueueService);
+    assertEquals(hearthBeatServiceUnderTest.healthStatus().getQueue(), "ok");
   }
 
   @Test
