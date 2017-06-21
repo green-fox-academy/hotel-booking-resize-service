@@ -2,6 +2,7 @@ package com.greenfox.malachit;
 
 import com.greenfox.malachit.model.HealthCheck;
 import com.greenfox.malachit.repository.HealthCheckRepository;
+import com.greenfox.malachit.service.MessageQueueService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
@@ -36,6 +37,9 @@ public class HearthbeatEndpointTest {
   @MockBean
   private HealthCheckRepository healthCheckRepository;
 
+  @MockBean
+  private MessageQueueService messageQueueService;
+
   @Test
   public void getEndpointDatabaseOk() throws Exception {
     ArrayList<HealthCheck> toReturn = new ArrayList<>();
@@ -44,6 +48,8 @@ public class HearthbeatEndpointTest {
             .willReturn(
                    toReturn
             );
+    BDDMockito.given(messageQueueService.messagesInQueue())
+            .willReturn(0);
     mockMvc.perform(get("/heartbeat")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -58,6 +64,8 @@ public class HearthbeatEndpointTest {
             .willReturn(
                     toReturn
             );
+    BDDMockito.given(messageQueueService.messagesInQueue())
+            .willReturn(1);
     mockMvc.perform(get("/heartbeat")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
