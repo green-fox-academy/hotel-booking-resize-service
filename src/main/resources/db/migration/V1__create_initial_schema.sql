@@ -1,1 +1,1 @@
-create table health_check (id bigint not null, ok int not null, primary key (id));
+create table health_check (id int8 not null, ok int4 not null, primary key (id));
