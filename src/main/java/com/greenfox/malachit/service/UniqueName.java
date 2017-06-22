@@ -2,6 +2,7 @@ package com.greenfox.malachit.service;
 
 import com.greenfox.malachit.repository.ImageDataReposytory;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -16,6 +17,11 @@ public class UniqueName {
   private static SecureRandom srnd = new SecureRandom();
   private ImageDataReposytory imageDataReposytory;
 
+  @Autowired
+  public UniqueName(ImageDataReposytory imageDataReposytory) {
+    this.imageDataReposytory = imageDataReposytory;
+  }
+
   public String createUniqueName() {
     String name = randomName();
     while (!isRandom(name)) {
@@ -24,7 +30,7 @@ public class UniqueName {
     return name;
   }
 
-  public String randomName() {
+  private String randomName() {
     StringBuilder name = new StringBuilder(NAMELENGTH);
     for (int i = 0; i < NAMELENGTH; i++) {
       name.append(NAMECHARS.charAt(srnd.nextInt(NAMECHARS.length())));
@@ -32,7 +38,7 @@ public class UniqueName {
     return name.toString();
   }
 
-  public boolean isRandom(String name) {
+  private boolean isRandom(String name) {
     boolean random = true;
     for (Long i = 0L; i < imageDataReposytory.count(); i++) {
       String url = imageDataReposytory.findOne(i).getUrl();
