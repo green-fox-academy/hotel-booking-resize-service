@@ -1,7 +1,7 @@
 package com.greenfox.malachit.service;
 
 import com.greenfox.malachit.model.ImageData;
-import com.greenfox.malachit.repository.ImageDataReposytory;
+import com.greenfox.malachit.repository.ImageDataRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -23,9 +23,9 @@ public class UniqueNameTest {
   public void createUniqueName() throws Exception {
     ArrayList<ImageData> mockedImageDataArrayList = new ArrayList<>();
     mockedImageDataArrayList.add(new ImageData("s3-eu-west-1.amazonaws.com/somebucket/hj2rtk4ds7pl.jpg"));
-    ImageDataReposytory mockedImageDataReposytory = Mockito.mock(ImageDataReposytory.class);
-    Mockito.when(mockedImageDataReposytory.findAll()).thenReturn(mockedImageDataArrayList);
-    UniqueName uniqueNameTested = new UniqueName(mockedImageDataReposytory);
+    ImageDataRepository mockedImageDataRepository = Mockito.mock(ImageDataRepository.class);
+    Mockito.when(mockedImageDataRepository.findAll()).thenReturn(mockedImageDataArrayList);
+    UniqueName uniqueNameTested = new UniqueName(mockedImageDataRepository);
     String mockedImageName = "hj2rtk4ds7pl";
     assertFalse(uniqueNameTested.createUniqueName().equals(mockedImageName));
   }
