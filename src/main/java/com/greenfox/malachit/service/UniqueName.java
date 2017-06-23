@@ -1,6 +1,6 @@
 package com.greenfox.malachit.service;
 
-import com.greenfox.malachit.repository.ImageDataReposytory;
+import com.greenfox.malachit.repository.ImageDataRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,11 +15,11 @@ public class UniqueName {
   private static int NAMELENGTH = 12;
   private static String SEPARATOR = ".jp";
   private static SecureRandom srnd = new SecureRandom();
-  private ImageDataReposytory imageDataReposytory;
+  private ImageDataRepository imageDataRepository;
 
   @Autowired
-  public UniqueName(ImageDataReposytory imageDataReposytory) {
-    this.imageDataReposytory = imageDataReposytory;
+  public UniqueName(ImageDataRepository imageDataRepository) {
+    this.imageDataRepository = imageDataRepository;
   }
 
   public String createUniqueName() {
@@ -40,8 +40,8 @@ public class UniqueName {
 
   private boolean isRandom(String name) {
     boolean random = true;
-    for (Long i = 0L; i < imageDataReposytory.count(); i++) {
-      String url = imageDataReposytory.findOne(i).getUrl();
+    for (Long i = 0L; i < imageDataRepository.count(); i++) {
+      String url = imageDataRepository.findOne(i).getUrl();
       String usedName = url.substring(url.indexOf(SEPARATOR) - NAMELENGTH, url.indexOf(SEPARATOR));
       if (name.equals(usedName)) {
         random = false;

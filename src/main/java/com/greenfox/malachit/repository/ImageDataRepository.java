@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.ArrayList;
 
-public interface ImageDataReposytory extends CrudRepository<ImageData, Long> {
+public interface ImageDataRepository extends CrudRepository<ImageData, Long> {
 
   @Override
   public ArrayList<ImageData> findAll();
