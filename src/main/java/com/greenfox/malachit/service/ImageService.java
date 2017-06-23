@@ -8,6 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class ImageService {
 
   public ImageResponse createResponse(MultipartFile file) {
-
+    return new ImageResponse();
   }
 }
