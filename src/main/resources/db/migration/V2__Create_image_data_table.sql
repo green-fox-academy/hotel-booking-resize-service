@@ -1,0 +1,1 @@
+create table image_data (id int8 not null, url varchar(255), primary key (id))
