@@ -8,7 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ImageResizeGeoApplication implements CommandLineRunner{
+public class ImageResizeGeoApplication {
 
   @Autowired
   HealthCheckRepository healthCheckRepository;
@@ -16,9 +16,4 @@ public class ImageResizeGeoApplication implements CommandLineRunner{
 	public static void main(String[] args) {
 		SpringApplication.run(ImageResizeGeoApplication.class, args);
 	}
-
-  @Override
-  public void run(String... args) throws Exception {
-	  healthCheckRepository.save(new HealthCheck(1));
-  }
 }
