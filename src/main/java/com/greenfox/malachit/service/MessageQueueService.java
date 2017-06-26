@@ -55,13 +55,13 @@ public class MessageQueueService {
     return dok.getMessageCount();
   }
 
-  public void dispach() throws Exception{
+  public void dispatch(String inputMessage) throws Exception{
     ConnectionFactory factory = new ConnectionFactory();
-    factory.setUri(System.getenv("SEND_EVENT_QUEUE_NAME"));
+    factory.setUri(System.getenv("RABBIT"));
     Connection connection = factory.newConnection();
     Channel channel = connection.createChannel();
-    channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-    String message = "ok";
+    channel.queueDeclare(System.getenv("SEND_EVENT_QUEUE_NAME"), false, false, false, null);
+    String message = new EventCreator(inputMessage).createEventString();
     channel.basicPublish("", QUEUE_NAME, MessageProperties.PERSISTENT_TEXT_PLAIN,"message".getBytes());
 
     channel.close();

@@ -22,7 +22,7 @@ public class HeartbeatRestController {
   }
 
   @GetMapping("/")
-  public Hearthbeat indexHello() {
+  public Hearthbeat indexHello() throws Exception {
     logger.info("HTTP-REQUEST / works as intended");
     return new Hearthbeat("Hello", "Hello", "Hello");
   }
