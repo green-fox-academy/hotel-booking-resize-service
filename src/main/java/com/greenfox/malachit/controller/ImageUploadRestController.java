@@ -21,7 +21,7 @@ public class ImageUploadRestController {
   }
 
   @PostMapping(value="/images", headers="content-type=multipart/*")
-  public ImageResponse getFile(@RequestParam("fileName") MultipartFile file){
+  public ImageResponse getFile(@RequestParam("fileName") MultipartFile file) throws Exception{
     return  imageService.createResponse(file);
   }
 }
