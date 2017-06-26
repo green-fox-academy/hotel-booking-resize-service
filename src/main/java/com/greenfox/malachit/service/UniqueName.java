@@ -40,7 +40,7 @@ public class UniqueName {
 
   private boolean isRandom(String name) {
     boolean random = true;
-    for (Long i = 0L; i < imageDataRepository.count(); i++) {
+    for (Long i = 1L; i < imageDataRepository.count() + 1; i++) {
       String url = imageDataRepository.findOne(i).getUrl();
       String usedName = url.substring(url.indexOf(SEPARATOR) - NAMELENGTH, url.indexOf(SEPARATOR));
       if (name.equals(usedName)) {
