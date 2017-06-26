@@ -1,5 +1,6 @@
 package com.greenfox.malachit.service;
 
+import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -46,5 +47,13 @@ public class EventCreator {
 
   public void setMessage(String message) {
     this.message = message;
+  }
+
+  public String createEventString() {
+    JSONObject json = new JSONObject();
+    json.put("time", this.getTime());
+    json.put("hostname", this.getHostname());
+    json.put("message", this.getMessage());
+    return json.toJSONString();
   }
 }

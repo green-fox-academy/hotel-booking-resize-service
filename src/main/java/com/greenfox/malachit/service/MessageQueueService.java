@@ -54,4 +54,17 @@ public class MessageQueueService {
     AMQP.Queue.DeclareOk dok = channel.queueDeclare(QUEUE_NAME, false, false, false, null);
     return dok.getMessageCount();
   }
+
+  public void dispach() throws Exception{
+    ConnectionFactory factory = new ConnectionFactory();
+    factory.setUri(System.getenv("SEND_EVENT_QUEUE_NAME"));
+    Connection connection = factory.newConnection();
+    Channel channel = connection.createChannel();
+    channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+    String message = "ok";
+    channel.basicPublish("", QUEUE_NAME, MessageProperties.PERSISTENT_TEXT_PLAIN,"message".getBytes());
+
+    channel.close();
+    connection.close();
+  }
 }
