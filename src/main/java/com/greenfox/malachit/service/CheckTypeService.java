@@ -6,9 +6,6 @@ import org.springframework.stereotype.Service;
 public class CheckTypeService {
 
   public String checkIfImage(String toCheck) {
-    if (toCheck.contains("image")) {
-      return "images";
-    }
-    return toCheck;
+    return toCheck.contains("image") ? "image" : toCheck;
   }
 }
