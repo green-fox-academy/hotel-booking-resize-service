@@ -1,7 +1,5 @@
 package com.greenfox.malachit.controller;
 
-import com.greenfox.malachit.model.FileData;
-import com.greenfox.malachit.model.ImageData;
 import com.greenfox.malachit.model.ImageResponse;
 import com.greenfox.malachit.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
