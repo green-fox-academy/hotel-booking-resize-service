@@ -21,14 +21,13 @@ public class HeartbeatRestController {
   }
 
   @GetMapping("/")
-  public Hearthbeat indexHello() {
+  public Hearthbeat indexHello() throws Exception {
     logger.info("HTTP-REQUEST / works as intended");
-    return new Hearthbeat("Hello", "Hello");
+    return new Hearthbeat("Hello", "Hello", "Hello");
   }
 
   @GetMapping("/heartbeat")
-  public Hearthbeat healthCheck() {
-    logger.info("HTTP-REQUEST /heartbeat works as intended");
+  public Hearthbeat healthCheck() throws Exception {
     return hearthBeatService.healthStatus();
   }
 }

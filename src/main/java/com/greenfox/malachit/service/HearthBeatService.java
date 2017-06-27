@@ -9,16 +9,32 @@ import org.springframework.stereotype.Service;
 public class HearthBeatService {
 
   private HealthCheckRepository healthCheckRepository;
+  private MessageQueueService messageQueueService;
 
   @Autowired
-  public HearthBeatService(HealthCheckRepository healthCheckRepository){
+  public HearthBeatService(HealthCheckRepository healthCheckRepository, MessageQueueService messageQueueService){
     this.healthCheckRepository = healthCheckRepository;
+    this.messageQueueService = messageQueueService;
   }
 
-  public Hearthbeat healthStatus() {
-    if (healthCheckRepository.findAllByOrderById().size() >= 1) {
-      return new Hearthbeat("ok", "ok");
+  public Hearthbeat healthStatus() throws Exception {
+    Hearthbeat hearthbeatResponse = new Hearthbeat();
+    if (healthCheckRepository.findAllByOrderById().size() < 1) {
+      hearthbeatResponse.setDatabase("error");
     }
-      return new Hearthbeat("ok", "error");
+    try {
+      messageQueueService.sendMessage();
+    } catch (Exception e) {
+      hearthbeatResponse.setQueue("error");
+    }
+    try {
+      messageQueueService.receiveMessage();
+    } catch (Exception e) {
+      hearthbeatResponse.setQueue("error");
+    }
+    if (messageQueueService.messagesInQueue() > 0) {
+      hearthbeatResponse.setQueue("error");
+    }
+      return hearthbeatResponse;
   }
 }

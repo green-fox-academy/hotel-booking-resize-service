@@ -3,6 +3,7 @@ package com.greenfox.malachit;
 import com.greenfox.malachit.model.HealthCheck;
 import com.greenfox.malachit.repository.HealthCheckRepository;
 import com.greenfox.malachit.service.HearthBeatService;
+import com.greenfox.malachit.service.MessageQueueService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -18,23 +19,45 @@ import static org.junit.Assert.*;
 public class HearthbeatTest {
 
   @Test
-  public void getHearthbeatError() {
+  public void getHearthbeatDatabaseError() throws Exception {
     ArrayList<HealthCheck> toReturn = new ArrayList<>();
     HealthCheckRepository mockedHealthCheckRepository = Mockito.mock(HealthCheckRepository.class);
+    MessageQueueService mockedMessageQueueService = Mockito.mock(MessageQueueService.class);
     Mockito.when(mockedHealthCheckRepository.findAllByOrderById())
             .thenReturn(toReturn);
-    HearthBeatService hearthBeatServiceUnderTest = new HearthBeatService(mockedHealthCheckRepository);
+    HearthBeatService hearthBeatServiceUnderTest = new HearthBeatService(mockedHealthCheckRepository, mockedMessageQueueService);
     assertEquals(hearthBeatServiceUnderTest.healthStatus().getDatabase(), "error");
   }
 
   @Test
-  public void getHearthbeatOk() {
+  public void getHeartbeatMessagequeueError() throws Exception {
+    HealthCheckRepository mockedHealthCheckRepository = Mockito.mock(HealthCheckRepository.class);
+    MessageQueueService mockedMessageQueueService = Mockito.mock(MessageQueueService.class);
+    Mockito.when(mockedMessageQueueService.messagesInQueue())
+            .thenReturn(1);
+    HearthBeatService hearthBeatServiceUnderTest = new HearthBeatService(mockedHealthCheckRepository, mockedMessageQueueService);
+    assertEquals(hearthBeatServiceUnderTest.healthStatus().getQueue(), "error");
+  }
+
+  @Test
+  public void getHeartbeatMessagequeueOk() throws Exception {
+    HealthCheckRepository mockedHealthCheckRepository = Mockito.mock(HealthCheckRepository.class);
+    MessageQueueService mockedMessageQueueService = Mockito.mock(MessageQueueService.class);
+    Mockito.when(mockedMessageQueueService.messagesInQueue())
+            .thenReturn(0);
+    HearthBeatService hearthBeatServiceUnderTest = new HearthBeatService(mockedHealthCheckRepository, mockedMessageQueueService);
+    assertEquals(hearthBeatServiceUnderTest.healthStatus().getQueue(), "ok");
+  }
+
+  @Test
+  public void getHearthbeatOk() throws Exception {
     ArrayList<HealthCheck> toReturn = new ArrayList<>();
     toReturn.add(new HealthCheck(1));
     HealthCheckRepository mockedHealthCheckRepository = Mockito.mock(HealthCheckRepository.class);
+    MessageQueueService mockedMessageQueueService = Mockito.mock(MessageQueueService.class);
     Mockito.when(mockedHealthCheckRepository.findAllByOrderById())
             .thenReturn(toReturn);
-    HearthBeatService hearthBeatServiceUnderTest = new HearthBeatService(mockedHealthCheckRepository);
+    HearthBeatService hearthBeatServiceUnderTest = new HearthBeatService(mockedHealthCheckRepository, mockedMessageQueueService);
     assertEquals(hearthBeatServiceUnderTest.healthStatus().getDatabase(), "ok");
   }
 

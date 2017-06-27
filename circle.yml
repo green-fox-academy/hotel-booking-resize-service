@@ -14,4 +14,3 @@ dependencies:
   override:
     - chmod +x gradlew
     - ./gradlew dependencies
-

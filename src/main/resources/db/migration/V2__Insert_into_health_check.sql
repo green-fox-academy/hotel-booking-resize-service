@@ -1,0 +1,1 @@
+insert into health_check (id, ok) values (1, 1);
