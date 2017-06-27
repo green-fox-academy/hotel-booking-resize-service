@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.greenfox.malachit.model.FileData;
+import com.greenfox.malachit.model.FileDataDTO;
 import com.greenfox.malachit.model.ImageData;
 import com.greenfox.malachit.model.ImageResponse;
 import com.greenfox.malachit.repository.ImageDataRepository;
@@ -35,7 +36,7 @@ public class ImageService {
     String imageDataUrl = uploadImage(file);
     ImageResponse imageResponse = new ImageResponse();
     ImageData imageData = new ImageData(imageDataUrl);
-    FileData fileData = new FileData(checkTypeService.checkIfImage(file.getContentType()), imageData);
+    FileDataDTO fileData = new FileDataDTO(checkTypeService.checkIfImage(file.getContentType()), imageData);
     imageDataRepository.save(imageData);
     imageResponse.setData(fileData);
     return imageResponse;
