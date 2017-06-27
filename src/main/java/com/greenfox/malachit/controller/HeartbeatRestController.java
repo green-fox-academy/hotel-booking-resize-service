@@ -29,7 +29,7 @@ public class HeartbeatRestController {
 
   @GetMapping("/heartbeat")
   public Hearthbeat healthCheck() throws Exception {
-    logger.info("HTTP-REQUEST /heartbeat works as intended");
+    //logger.info("HTTP-REQUEST /heartbeat works as intended");
     return hearthBeatService.healthStatus();
   }
 }
