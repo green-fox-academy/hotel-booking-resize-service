@@ -9,8 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FileData {
+public class FileData<T>{
 
   private String type;
-  private ImageData attributes;
+  private long id;
+  private T attributes;
 }
