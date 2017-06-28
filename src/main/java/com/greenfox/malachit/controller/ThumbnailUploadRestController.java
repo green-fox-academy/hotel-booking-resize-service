@@ -20,6 +20,7 @@ public class ThumbnailUploadRestController {
   @ResponseBody
   public ImageResponse getfile(@RequestBody ImageResponse imageResponse, @PathVariable long imageId) throws Exception {
     imageResponse.getData().getAttributes();
+    System.out.println(imageId);
     return imageResponse;
   }
 }

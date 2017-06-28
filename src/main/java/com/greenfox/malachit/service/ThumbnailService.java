@@ -18,8 +18,19 @@ public class ThumbnailService {
   public ThumbnailService(ThumbnailRepository thumbnailRepository) {
     this.thumbnailRepository = thumbnailRepository;
   }
+  //********************************
+  //should get id and isMain boolean
+  //********************************
   public ThumbnailResponse createResponse(boolean isMain) {
     return new ThumbnailResponse();
+  }
+
+  public FileData thumbnailData(boolean isMain) {
+    FileData toReturn = new FileData();
+    toReturn.setType("thumbnails");
+    toReturn.setAttributes(this.saveThumbnailAttributes(isMain));
+    toReturn.setId(thumbnailRepository.findFirstByOrderByIdDesc().getId());
+    return toReturn;
   }
 
   public ThumbnailAttributesDTO saveThumbnailAttributes(boolean isMain) {
