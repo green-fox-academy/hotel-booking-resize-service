@@ -3,4 +3,3 @@ CREATE TABLE health_check (
   ok INT NOT NULL,
   primary key (id)
 );
-CREATE SEQUENCE hibernate_sequence;
