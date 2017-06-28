@@ -19,12 +19,13 @@ public class ThumbnailService {
   public ThumbnailService(ThumbnailRepository thumbnailRepository) {
     this.thumbnailRepository = thumbnailRepository;
   }
-  //********************************
-  //should get id and isMain boolean
-  //********************************
+  
   public ThumbnailResponse createResponse(boolean isMain, long id) {
     thumbnailRepository.save(new ThumbnailAttributes());
-    id = thumbnailRepository.findFirstByOrderByIdDesc().getId();
+    currentId = thumbnailRepository.findFirstByOrderByIdDesc().getId();
+    ThumbnailResponse toReturn = new ThumbnailResponse();
+    toReturn.setLinks(new SelfUrl(this.createSelfUrl(id)));
+    toReturn.setData(thumbnailData(isMain));
     return new ThumbnailResponse();
   }
 
