@@ -14,7 +14,7 @@ import javax.persistence.Id;
 public class HealthCheck {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private long id;
   private int ok;
 

@@ -1,1 +1,5 @@
-create table image_data (id int8 not null, url varchar(255), primary key (id))
+CREATE TABLE image_data (
+  id BIGINT NOT NULL,
+  url VARCHAR(255),
+  primary key (id)
+);
