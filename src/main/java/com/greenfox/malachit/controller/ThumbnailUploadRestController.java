@@ -22,6 +22,6 @@ public class ThumbnailUploadRestController {
   @PostMapping(value = "/hotels/{hotelId}/thumbnail")
   @ResponseBody
   public ThumbnailResponse getfile(@RequestBody IncomingDataMap incomingDataMap, @PathVariable long hotelId) throws Exception {
-    return thumbnailService.createResponse(incomingDataMap.getData().getAttributes().is_main(), hotelId);
+    return thumbnailService.createResponse(incomingDataMap.getData().getAttributes().getIs_main(), hotelId);
   }
 }

@@ -38,7 +38,7 @@ public class ThumbnailService {
   public ThumbnailAttributesDTO saveThumbnailAttributes(boolean isMain) {
     ThumbnailAttributes toSave = thumbnailRepository.findOne(currentId);
     toSave.setType("thumbnails");
-    toSave.set_main(isMain);
+    toSave.setIs_main(isMain);
     toSave.setCreated_at(LocalDateTime.now().toString());
     toSave.setUploaded(false);
     toSave.setContent_url(this.generateContentUrl());
@@ -47,7 +47,7 @@ public class ThumbnailService {
   }
 
   public String generateContentUrl() {
-    return HOSTNAMEURL + currentId + "content";
+    return HOSTNAMEURL + currentId + "/content";
   }
 
   public String createSelfUrl(long id) {
@@ -56,7 +56,7 @@ public class ThumbnailService {
 
   public ThumbnailAttributesDTO createThumbnailDto(ThumbnailAttributes thumbnailAttributes) {
     ThumbnailAttributesDTO toReturn = new ThumbnailAttributesDTO();
-    toReturn.set_main(thumbnailAttributes.is_main());
+    toReturn.setIs_main(thumbnailAttributes.isIs_main());
     toReturn.setContent_url(thumbnailAttributes.getContent_url());
     toReturn.setCreated_at(thumbnailAttributes.getCreated_at());
     toReturn.setUploaded(thumbnailAttributes.isUploaded());
