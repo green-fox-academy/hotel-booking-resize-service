@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
 @Service
 public class ThumbnailService {
   private final static String HOSTNAMEURL = "https://your-hostname.com/media/images/";
-  private FileData fileData;
-  private SelfUrl selfUrl;
   private ThumbnailRepository thumbnailRepository;
   private long currentId;
 
@@ -19,14 +17,14 @@ public class ThumbnailService {
   public ThumbnailService(ThumbnailRepository thumbnailRepository) {
     this.thumbnailRepository = thumbnailRepository;
   }
-  
+
   public ThumbnailResponse createResponse(boolean isMain, long id) {
     thumbnailRepository.save(new ThumbnailAttributes());
     currentId = thumbnailRepository.findFirstByOrderByIdDesc().getId();
     ThumbnailResponse toReturn = new ThumbnailResponse();
     toReturn.setLinks(new SelfUrl(this.createSelfUrl(id)));
     toReturn.setData(thumbnailData(isMain));
-    return new ThumbnailResponse();
+    return toReturn;
   }
 
   public FileData thumbnailData(boolean isMain) {
@@ -38,19 +36,17 @@ public class ThumbnailService {
   }
 
   public ThumbnailAttributesDTO saveThumbnailAttributes(boolean isMain) {
-    ThumbnailAttributes toSave = new ThumbnailAttributes();
+    ThumbnailAttributes toSave = thumbnailRepository.findOne(currentId);
     toSave.setType("thumbnails");
     toSave.set_main(isMain);
     toSave.setCreated_at(LocalDateTime.now().toString());
     toSave.setUploaded(false);
     toSave.setContent_url(this.generateContentUrl());
-    toSave.setId(currentId);
     thumbnailRepository.save(toSave);
     return this.createThumbnailDto(toSave);
   }
 
   public String generateContentUrl() {
-    thumbnailRepository.save(new ThumbnailAttributes());
     return HOSTNAMEURL + currentId + "content";
   }
 
@@ -59,6 +55,11 @@ public class ThumbnailService {
   }
 
   public ThumbnailAttributesDTO createThumbnailDto(ThumbnailAttributes thumbnailAttributes) {
-    return new ThumbnailAttributesDTO(thumbnailAttributes.is_main(), thumbnailAttributes.isUploaded(), thumbnailAttributes.getCreated_at(), thumbnailAttributes.getContent_url());
+    ThumbnailAttributesDTO toReturn = new ThumbnailAttributesDTO();
+    toReturn.set_main(thumbnailAttributes.is_main());
+    toReturn.setContent_url(thumbnailAttributes.getContent_url());
+    toReturn.setCreated_at(thumbnailAttributes.getCreated_at());
+    toReturn.setUploaded(thumbnailAttributes.isUploaded());
+    return toReturn;
   }
 }

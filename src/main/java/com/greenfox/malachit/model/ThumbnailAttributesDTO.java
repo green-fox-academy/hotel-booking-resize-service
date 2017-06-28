@@ -2,7 +2,6 @@ package com.greenfox.malachit.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -11,6 +10,8 @@ public class ThumbnailAttributesDTO {
   private boolean uploaded;
   private String created_at;
   private String content_url;
+
+  public ThumbnailAttributesDTO() {}
 
   public ThumbnailAttributesDTO(boolean is_main, boolean uploaded, String created_at, String content_url) {
     this.is_main = is_main;
