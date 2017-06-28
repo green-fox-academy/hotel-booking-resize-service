@@ -13,6 +13,7 @@ public class ThumbnailService {
   private FileData fileData;
   private SelfUrl selfUrl;
   private ThumbnailRepository thumbnailRepository;
+  private long currentId;
 
   @Autowired
   public ThumbnailService(ThumbnailRepository thumbnailRepository) {
@@ -21,7 +22,9 @@ public class ThumbnailService {
   //********************************
   //should get id and isMain boolean
   //********************************
-  public ThumbnailResponse createResponse(boolean isMain) {
+  public ThumbnailResponse createResponse(boolean isMain, long id) {
+    thumbnailRepository.save(new ThumbnailAttributes());
+    id = thumbnailRepository.findFirstByOrderByIdDesc().getId();
     return new ThumbnailResponse();
   }
 
@@ -29,7 +32,7 @@ public class ThumbnailService {
     FileData toReturn = new FileData();
     toReturn.setType("thumbnails");
     toReturn.setAttributes(this.saveThumbnailAttributes(isMain));
-    toReturn.setId(thumbnailRepository.findFirstByOrderByIdDesc().getId());
+    toReturn.setId(currentId);
     return toReturn;
   }
 
@@ -39,15 +42,19 @@ public class ThumbnailService {
     toSave.set_main(isMain);
     toSave.setCreated_at(LocalDateTime.now().toString());
     toSave.setUploaded(false);
-    toSave.setContent_url(this.generateUrl());
-    toSave.setId(thumbnailRepository.findFirstByOrderByIdDesc().getId());
+    toSave.setContent_url(this.generateContentUrl());
+    toSave.setId(currentId);
     thumbnailRepository.save(toSave);
     return this.createThumbnailDto(toSave);
   }
 
-  public String generateUrl() {
+  public String generateContentUrl() {
     thumbnailRepository.save(new ThumbnailAttributes());
-    return HOSTNAMEURL + thumbnailRepository.findFirstByOrderByIdDesc().getId() + "content";
+    return HOSTNAMEURL + currentId + "content";
+  }
+
+  public String createSelfUrl(long id) {
+    return "https://your-hostname.com/hotels/" + id + "/thumbnails/" + currentId;
   }
 
   public ThumbnailAttributesDTO createThumbnailDto(ThumbnailAttributes thumbnailAttributes) {
