@@ -7,8 +7,10 @@ deployment:
 machine:
   java:
     version: oraclejdk8
+  services:
+    - postgresql
   environment:
-    DATABASE_URL: jdbc:mysql://localhost:3306/circle_test?user=ubuntu&password=
+    DATABASE_URL: jdbc:postgresql://ubuntu:@127.0.0.1:5432/circle_test
 
 dependencies:
   override:
