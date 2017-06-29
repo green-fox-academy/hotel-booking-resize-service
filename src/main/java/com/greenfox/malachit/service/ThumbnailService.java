@@ -65,6 +65,15 @@ public class ThumbnailService {
     return toReturn;
   }
 
+  public ThumbnailResponse getListingResponse(long hotelId, boolean is_main) {
+    if(is_main) {
+      return createMainFilteredResponse(hotelId);
+    }
+    else {
+      return createListingResponse(hotelId);
+    }
+  }
+
   public ThumbnailResponse createListingResponse(long hotelId) {
     ThumbnailResponse toReturn = new ThumbnailResponse();
     toReturn.setData(createListingData(hotelId));

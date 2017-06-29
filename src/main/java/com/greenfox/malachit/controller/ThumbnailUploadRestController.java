@@ -17,21 +17,15 @@ public class ThumbnailUploadRestController {
     this.thumbnailService = thumbnailService;
   }
 
-  @PostMapping(value = "/hotels/{hotelId}/thumbnails")
+  @PostMapping("/hotels/{hotelId}/thumbnails")
   @ResponseStatus(HttpStatus.CREATED)
   public ThumbnailResponse addThumbnail(@RequestBody IncomingDataMap incomingDataMap, @PathVariable long hotelId) throws Exception {
     return thumbnailService.createResponse(incomingDataMap.getData().getAttributes().getIs_main(), hotelId);
   }
 
-  @GetMapping("/hotels/{hotelId}/thumbnails?is_main=true")
-  @ResponseStatus(HttpStatus.OK)
-  public ThumbnailResponse thumbnailFilteredMainListing(@PathVariable long hotelId, @RequestParam("is_main") boolean is_main) {
-    return thumbnailService.createMainFilteredResponse(hotelId);
-  }
-
   @GetMapping("/hotels/{hotelId}/thumbnails")
-  @ResponseStatus(HttpStatus.CREATED)
-  public ThumbnailResponse thumbnailListing(@PathVariable long hotelId) {
-    return thumbnailService.createListingResponse(hotelId);
+  @ResponseStatus(HttpStatus.OK)
+  public ThumbnailResponse thumbnailFilteredMainListing(@PathVariable long hotelId, @RequestParam(value = "is_main", defaultValue = "false") boolean is_main) {
+    return thumbnailService.getListingResponse(hotelId, is_main);
   }
 }
