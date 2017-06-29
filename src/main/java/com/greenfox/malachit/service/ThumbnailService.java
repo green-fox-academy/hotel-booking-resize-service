@@ -143,4 +143,12 @@ public class ThumbnailService {
     toReturn.setAttributes(createThumbnailDto(thumbnailAttributes));
     return toReturn;
   }
+
+  public NullPointerResponse nullPointerResponse(Long id) {
+    NullPointerResponse toReturn = new NullPointerResponse();
+    List<ErrorResponse> buffer = new ArrayList<>();
+    buffer.add(new ErrorResponse("404", "Not found", "No thumbnails found"));
+    toReturn.setErrors(buffer);
+    return toReturn;
+  }
 }

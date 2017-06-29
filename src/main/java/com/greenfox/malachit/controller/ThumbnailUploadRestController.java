@@ -1,6 +1,7 @@
 package com.greenfox.malachit.controller;
 
 import com.greenfox.malachit.model.IncomingDataMap;
+import com.greenfox.malachit.model.NullPointerResponse;
 import com.greenfox.malachit.model.ThumbnailResponse;
 import com.greenfox.malachit.service.ThumbnailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,11 @@ public class ThumbnailUploadRestController {
   @Autowired
   public ThumbnailUploadRestController(ThumbnailService thumbnailService) {
     this.thumbnailService = thumbnailService;
+  }
+
+  @ExceptionHandler(java.lang.Exception.class)
+  public NullPointerResponse nullpointerErrorHandling(long imageId) {
+    return thumbnailService.nullPointerResponse(imageId);
   }
 
   @PostMapping("/hotels/{hotelId}/thumbnails")
