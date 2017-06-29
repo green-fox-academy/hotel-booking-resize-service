@@ -10,4 +10,5 @@ import java.util.List;
 public interface ThumbnailRepository extends CrudRepository<ThumbnailAttributes, Long>{
   public ThumbnailAttributes findFirstByOrderByIdDesc();
   public List<ThumbnailAttributes> findAllByHotelEquals(long hotel);
+  public ThumbnailAttributes findFirstByIdAndHotelEquals(long id, long hotel);
 }

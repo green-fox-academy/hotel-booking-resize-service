@@ -88,8 +88,19 @@ public class ThumbnailService {
     return toReturn;
   }
 
+  public ThumbnailResponse createSingleImageResponse(long hotelId, long imageId) {
+    ThumbnailResponse toReturn = new ThumbnailResponse();
+    toReturn.setData(createSingleImageData(hotelId, imageId));
+    toReturn.setLinks(new SelfUrl(this.createSingleImageUrl(hotelId, imageId)));
+    return toReturn;
+  }
+
   public String createFilteredListingUrl(long hotelId) {
     return "https://your-hostname.com/hotels/" + hotelId + "/thumbnails?is_main=true";
+  }
+
+  public String createSingleImageUrl(long hotelId, long imageId) {
+    return "https://your-hostname.com/api/hotels/" + hotelId + "/thumbnails/" + imageId;
   }
 
   public String createListingUrl(long hotelId) {
@@ -113,6 +124,15 @@ public class ThumbnailService {
     for (ThumbnailAttributes thumbnailAttributes : thumbnails) {
       toReturn.add(createThumbnailListElements(thumbnailAttributes));
     }
+    return toReturn;
+  }
+
+  public FileData createSingleImageData(long hotelId, long imageId) {
+    FileData toReturn = new FileData();
+    ThumbnailAttributes buffer = thumbnailRepository.findFirstByIdAndHotelEquals(imageId, hotelId);
+    toReturn.setType(buffer.getType());
+    toReturn.setId(buffer.getId());
+    toReturn.setAttributes(createThumbnailDto(buffer));
     return toReturn;
   }
 

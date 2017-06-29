@@ -28,4 +28,10 @@ public class ThumbnailUploadRestController {
   public ThumbnailResponse thumbnailFilteredMainListing(@PathVariable long hotelId, @RequestParam(value = "is_main", defaultValue = "false") boolean is_main) {
     return thumbnailService.getListingResponse(hotelId, is_main);
   }
+
+  @GetMapping("/hotels/{hotelId}/thumbnails/{imageId}")
+  @ResponseStatus(HttpStatus.OK)
+  public ThumbnailResponse thumbnailSingleTumbnail(@PathVariable long hotelId, @PathVariable long imageId) {
+    return thumbnailService.createSingleImageResponse(hotelId, imageId);
+  }
 }
