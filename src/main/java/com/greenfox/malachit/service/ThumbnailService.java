@@ -72,8 +72,30 @@ public class ThumbnailService {
     return toReturn;
   }
 
+  public ThumbnailResponse createMainFilteredResponse(long hotelId) {
+    ThumbnailResponse toReturn = new ThumbnailResponse();
+    toReturn.setData(createFilteredListingData(hotelId));
+    toReturn.setLinks(new SelfUrl(this.createFilteredListingUrl(hotelId)));
+    return toReturn;
+  }
+
+  public String createFilteredListingUrl(long hotelId) {
+    return "https://your-hostname.com/hotels/" + hotelId + "/thumbnails?is_main=true";
+  }
+
   public String createListingUrl(long hotelId) {
     return "https://your-hostname.com/hotels/" + hotelId + "/thumbnails";
+  }
+
+  public List<FileData> createFilteredListingData(long hotelId) {
+    List<FileData> toReturn = new ArrayList<>();
+    List<ThumbnailAttributes> thumbnails= thumbnailRepository.findAllByHotelEquals(hotelId);
+    for (ThumbnailAttributes thumbnailAttributes : thumbnails) {
+      if (thumbnailAttributes.isIs_main()) {
+        toReturn.add(createThumbnailListElements(thumbnailAttributes));
+      }
+    }
+    return toReturn;
   }
 
   public List<FileData> createListingData(long hotelId) {
