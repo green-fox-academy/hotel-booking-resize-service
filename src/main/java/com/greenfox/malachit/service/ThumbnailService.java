@@ -4,8 +4,9 @@ import com.greenfox.malachit.model.*;
 import com.greenfox.malachit.repository.ThumbnailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ThumbnailService {
@@ -18,30 +19,31 @@ public class ThumbnailService {
     this.thumbnailRepository = thumbnailRepository;
   }
 
-  public ThumbnailResponse createResponse(boolean isMain, long id) {
+  public ThumbnailResponse createResponse(boolean isMain, long hotelId) {
     thumbnailRepository.save(new ThumbnailAttributes());
     currentId = thumbnailRepository.findFirstByOrderByIdDesc().getId();
     ThumbnailResponse toReturn = new ThumbnailResponse();
-    toReturn.setLinks(new SelfUrl(this.createSelfUrl(id)));
-    toReturn.setData(thumbnailData(isMain));
+    toReturn.setLinks(new SelfUrl(this.createSelfUrl(hotelId)));
+    toReturn.setData(thumbnailData(isMain, hotelId));
     return toReturn;
   }
 
-  public FileData thumbnailData(boolean isMain) {
+  public FileData thumbnailData(boolean isMain, long hotelId) {
     FileData toReturn = new FileData();
     toReturn.setType("thumbnails");
-    toReturn.setAttributes(this.saveThumbnailAttributes(isMain));
+    toReturn.setAttributes(this.saveThumbnailAttributes(isMain, hotelId));
     toReturn.setId(currentId);
     return toReturn;
   }
 
-  public ThumbnailAttributesDTO saveThumbnailAttributes(boolean isMain) {
+  public ThumbnailAttributesDTO saveThumbnailAttributes(boolean isMain, long hotelId) {
     ThumbnailAttributes toSave = thumbnailRepository.findOne(currentId);
     toSave.setType("thumbnails");
     toSave.setIs_main(isMain);
     toSave.setCreated_at(LocalDateTime.now().toString());
     toSave.setUploaded(false);
     toSave.setContent_url(this.generateContentUrl());
+    toSave.setHotel(hotelId);
     thumbnailRepository.save(toSave);
     return this.createThumbnailDto(toSave);
   }
@@ -61,5 +63,16 @@ public class ThumbnailService {
     toReturn.setCreated_at(thumbnailAttributes.getCreated_at());
     toReturn.setUploaded(thumbnailAttributes.isUploaded());
     return toReturn;
+  }
+
+  public List<ThumbnailResponse> createListingResponse(long hotelId) {
+    List<ThumbnailResponse> toReturn = new ArrayList<>();
+    //for cpmpiling
+    return toReturn;
+  }
+
+  public ThumbnailResponse createThumbnailListElements(long hotelId) {
+    //for cpmpiling
+    return new ThumbnailResponse();
   }
 }

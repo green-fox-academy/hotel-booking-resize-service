@@ -1,8 +1,5 @@
 package com.greenfox.malachit.model;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,6 +10,7 @@ public class ThumbnailAttributes {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
+  private long hotel;
   private String type;
   private boolean is_main;
   private boolean uploaded;
@@ -67,5 +65,13 @@ public class ThumbnailAttributes {
 
   public void setContent_url(String content_url) {
     this.content_url = content_url;
+  }
+
+  public long getHotel() {
+    return hotel;
+  }
+
+  public void setHotel(long hotel) {
+    this.hotel = hotel;
   }
 }
