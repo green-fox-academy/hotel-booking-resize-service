@@ -27,7 +27,8 @@ public class ThumbnailUploadRestController {
   }
 
   @GetMapping("/hotels/{hotelId}/thumbnails")
-  public List<FileData> thumbnailListing(@PathVariable long hotelId) {
+  @ResponseStatus(HttpStatus.CREATED)
+  public ThumbnailResponse thumbnailListing(@PathVariable long hotelId) {
     return thumbnailService.createListingResponse(hotelId);
   }
 }

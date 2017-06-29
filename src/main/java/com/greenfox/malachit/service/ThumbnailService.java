@@ -65,7 +65,18 @@ public class ThumbnailService {
     return toReturn;
   }
 
-  public List<FileData> createListingResponse(long hotelId) {
+  public ThumbnailResponse createListingResponse(long hotelId) {
+    ThumbnailResponse toReturn = new ThumbnailResponse();
+    toReturn.setData(createListingData(hotelId));
+    toReturn.setLinks(new SelfUrl(this.createListingUrl(hotelId)));
+    return toReturn;
+  }
+
+  public String createListingUrl(long hotelId) {
+    return "https://your-hostname.com/hotels/" + hotelId + "/thumbnails";
+  }
+
+  public List<FileData> createListingData(long hotelId) {
     List<FileData> toReturn = new ArrayList<>();
     List<ThumbnailAttributes> thumbnails= thumbnailRepository.findAllByHotelEquals(hotelId);
     for (ThumbnailAttributes thumbnailAttributes : thumbnails) {

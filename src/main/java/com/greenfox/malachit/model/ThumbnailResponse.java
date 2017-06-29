@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ThumbnailResponse {
+public class ThumbnailResponse<T>{
   SelfUrl links;
-  FileData data;
+  T data;
 }
