@@ -1,6 +1,7 @@
 package com.greenfox.malachit.controller;
 
 import com.greenfox.malachit.model.IncomingDataMap;
+import com.greenfox.malachit.model.LinkResponse;
 import com.greenfox.malachit.model.NullPointerResponse;
 import com.greenfox.malachit.model.ThumbnailResponse;
 import com.greenfox.malachit.service.ThumbnailService;
@@ -39,5 +40,11 @@ public class ThumbnailUploadRestController {
   @ResponseStatus(HttpStatus.OK)
   public ThumbnailResponse thumbnailSingleTumbnail(@PathVariable long hotelId, @PathVariable long imageId) {
     return thumbnailService.createSingleImageResponse(hotelId, imageId);
+  }
+
+  @DeleteMapping("/hotels/{hotelId}/thumbnails/{thumbnailId}")
+  @ResponseStatus(HttpStatus.OK)
+  public LinkResponse deleteSingleThumbnail(@PathVariable long hotelId, @PathVariable long thumbnailId) {
+    return thumbnailService.deleteSingleThumbnail(hotelId, thumbnailId);
   }
 }
