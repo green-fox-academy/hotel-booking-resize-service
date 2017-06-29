@@ -65,15 +65,20 @@ public class ThumbnailService {
     return toReturn;
   }
 
-  public List<ThumbnailResponse> createListingResponse(long hotelId) {
-    List<ThumbnailResponse> toReturn = new ArrayList<>();
+  public List<FileData> createListingResponse(long hotelId) {
+    List<FileData> toReturn = new ArrayList<>();
     List<ThumbnailAttributes> thumbnails= thumbnailRepository.findAllByHotelEquals(hotelId);
-    //for cpmpiling
+    for (ThumbnailAttributes thumbnailAttributes : thumbnails) {
+      toReturn.add(createThumbnailListElements(thumbnailAttributes));
+    }
     return toReturn;
   }
 
-  public ThumbnailResponse createThumbnailListElements(long hotelId) {
-    //for cpmpiling
-    return new ThumbnailResponse();
+  public FileData createThumbnailListElements(ThumbnailAttributes thumbnailAttributes) {
+    FileData toReturn = new FileData();
+    toReturn.setType(thumbnailAttributes.getType());
+    toReturn.setId(thumbnailAttributes.getId());
+    toReturn.setAttributes(createThumbnailDto(thumbnailAttributes));
+    return toReturn;
   }
 }
