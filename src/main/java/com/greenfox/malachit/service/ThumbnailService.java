@@ -67,6 +67,7 @@ public class ThumbnailService {
 
   public List<ThumbnailResponse> createListingResponse(long hotelId) {
     List<ThumbnailResponse> toReturn = new ArrayList<>();
+    List<ThumbnailAttributes> thumbnails= thumbnailRepository.findAllByHotelEquals(hotelId);
     //for cpmpiling
     return toReturn;
   }
