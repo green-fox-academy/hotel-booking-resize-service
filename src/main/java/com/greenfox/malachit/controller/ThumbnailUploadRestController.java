@@ -6,6 +6,7 @@ import com.greenfox.malachit.model.ThumbnailResponse;
 import com.greenfox.malachit.service.ImageService;
 import com.greenfox.malachit.service.ThumbnailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,7 +21,7 @@ public class ThumbnailUploadRestController {
   }
 
   @PostMapping(value = "/hotels/{hotelId}/thumbnail")
-  @ResponseBody
+  @ResponseStatus(HttpStatus.CREATED)
   public ThumbnailResponse getfile(@RequestBody IncomingDataMap incomingDataMap, @PathVariable long hotelId) throws Exception {
     return thumbnailService.createResponse(incomingDataMap.getData().getAttributes().getIs_main(), hotelId);
   }
