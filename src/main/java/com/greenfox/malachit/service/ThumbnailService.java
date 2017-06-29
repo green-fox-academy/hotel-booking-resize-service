@@ -12,7 +12,6 @@ import java.util.List;
 public class ThumbnailService {
   private final static String HOSTNAMEURL = "https://your-hostname.com/media/images/";
   private ThumbnailRepository thumbnailRepository;
-  private long currentId;
 
   @Autowired
   public ThumbnailService(ThumbnailRepository thumbnailRepository) {
@@ -21,39 +20,39 @@ public class ThumbnailService {
 
   public ThumbnailResponse createResponse(boolean isMain, long hotelId) {
     thumbnailRepository.save(new ThumbnailAttributes());
-    currentId = thumbnailRepository.findFirstByOrderByIdDesc().getId();
+    long thumbnailId = thumbnailRepository.findFirstByOrderByIdDesc().getId();
     ThumbnailResponse toReturn = new ThumbnailResponse();
-    toReturn.setLinks(new SelfUrl(this.createSelfUrl(hotelId)));
-    toReturn.setData(thumbnailData(isMain, hotelId));
+    toReturn.setLinks(new SelfUrl(this.createSelfUrl(hotelId, thumbnailId)));
+    toReturn.setData(thumbnailData(isMain, hotelId, thumbnailId));
     return toReturn;
   }
 
-  public FileData thumbnailData(boolean isMain, long hotelId) {
+  public FileData thumbnailData(boolean isMain, long hotelId, long thumbnailId) {
     FileData toReturn = new FileData();
     toReturn.setType("thumbnails");
-    toReturn.setAttributes(this.saveThumbnailAttributes(isMain, hotelId));
-    toReturn.setId(currentId);
+    toReturn.setAttributes(this.saveThumbnailAttributes(isMain, hotelId, thumbnailId));
+    toReturn.setId(thumbnailId);
     return toReturn;
   }
 
-  public ThumbnailAttributesDTO saveThumbnailAttributes(boolean isMain, long hotelId) {
-    ThumbnailAttributes toSave = thumbnailRepository.findOne(currentId);
+  public ThumbnailAttributesDTO saveThumbnailAttributes(boolean isMain, long hotelId, long thumbnailId) {
+    ThumbnailAttributes toSave = thumbnailRepository.findOne(thumbnailId);
     toSave.setType("thumbnails");
     toSave.setIs_main(isMain);
     toSave.setCreated_at(LocalDateTime.now().toString());
     toSave.setUploaded(false);
-    toSave.setContent_url(this.generateContentUrl());
+    toSave.setContent_url(this.generateContentUrl(thumbnailId));
     toSave.setHotel(hotelId);
     thumbnailRepository.save(toSave);
     return this.createThumbnailDto(toSave);
   }
 
-  public String generateContentUrl() {
-    return HOSTNAMEURL + currentId + "/content";
+  public String generateContentUrl(long thumbnailId) {
+    return HOSTNAMEURL + thumbnailId + "/content";
   }
 
-  public String createSelfUrl(long id) {
-    return "https://your-hostname.com/hotels/" + id + "/thumbnails/" + currentId;
+  public String createSelfUrl(long id, long thumbnailId) {
+    return "https://your-hostname.com/hotels/" + id + "/thumbnails/" + thumbnailId;
   }
 
   public ThumbnailAttributesDTO createThumbnailDto(ThumbnailAttributes thumbnailAttributes) {
@@ -150,5 +149,12 @@ public class ThumbnailService {
     buffer.add(new ErrorResponse("404", "Not found", "No thumbnails found"));
     toReturn.setErrors(buffer);
     return toReturn;
+  }
+
+  public LinkResponse deleteSingleThumbnail(long hotelId, long thumbnailId) {
+    LinkResponse linkResponse = new LinkResponse();
+    linkResponse.setLinks(new SelfUrl(this.createSelfUrl(hotelId, thumbnailId)));
+    thumbnailRepository.delete(thumbnailId);
+    return linkResponse;
   }
 }
