@@ -87,7 +87,7 @@ public class ThumbnailService {
     return toReturn;
   }
 
-  public ThumbnailResponse createSingleImageResponse(long hotelId, long imageId) {
+  public ThumbnailResponse createSingleImageResponse(long hotelId, long imageId) throws Exception{
     ThumbnailResponse toReturn = new ThumbnailResponse();
     toReturn.setData(createSingleImageData(hotelId, imageId));
     toReturn.setLinks(new SelfUrl(this.createSingleImageUrl(hotelId, imageId)));
@@ -126,13 +126,18 @@ public class ThumbnailService {
     return toReturn;
   }
 
-  public FileData createSingleImageData(long hotelId, long imageId) {
-    FileData toReturn = new FileData();
-    ThumbnailAttributes buffer = thumbnailRepository.findFirstByIdAndHotelEquals(imageId, hotelId);
-    toReturn.setType(buffer.getType());
-    toReturn.setId(buffer.getId());
-    toReturn.setAttributes(createThumbnailDto(buffer));
-    return toReturn;
+  public FileData createSingleImageData(long hotelId, long imageId) throws Exception{
+    if(thumbnailRepository.exists(imageId)) {
+      FileData toReturn = new FileData();
+      ThumbnailAttributes buffer = thumbnailRepository.findFirstByIdAndHotelEquals(imageId, hotelId);
+      toReturn.setType(buffer.getType());
+      toReturn.setId(buffer.getId());
+      toReturn.setAttributes(createThumbnailDto(buffer));
+      return toReturn;
+    }
+    else {
+      throw new NoImageFoundException(Long.toString(imageId));
+    }
   }
 
   public FileData createThumbnailListElements(ThumbnailAttributes thumbnailAttributes) {
@@ -140,14 +145,6 @@ public class ThumbnailService {
     toReturn.setType(thumbnailAttributes.getType());
     toReturn.setId(thumbnailAttributes.getId());
     toReturn.setAttributes(createThumbnailDto(thumbnailAttributes));
-    return toReturn;
-  }
-
-  public NullPointerResponse nullPointerResponse(Long id) {
-    NullPointerResponse toReturn = new NullPointerResponse();
-    List<ErrorResponse> buffer = new ArrayList<>();
-    buffer.add(new ErrorResponse("404", "Not found", "No thumbnails found"));
-    toReturn.setErrors(buffer);
     return toReturn;
   }
 

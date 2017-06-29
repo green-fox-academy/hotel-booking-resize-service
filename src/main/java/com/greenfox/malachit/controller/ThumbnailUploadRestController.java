@@ -1,13 +1,13 @@
 package com.greenfox.malachit.controller;
 
-import com.greenfox.malachit.model.IncomingDataMap;
-import com.greenfox.malachit.model.LinkResponse;
-import com.greenfox.malachit.model.NullPointerResponse;
-import com.greenfox.malachit.model.ThumbnailResponse;
+import com.greenfox.malachit.model.*;
 import com.greenfox.malachit.service.ThumbnailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @RestController
 public class ThumbnailUploadRestController {
@@ -19,9 +19,9 @@ public class ThumbnailUploadRestController {
     this.thumbnailService = thumbnailService;
   }
 
-  @ExceptionHandler(java.lang.Exception.class)
-  public NullPointerResponse nullpointerErrorHandling(long imageId) {
-    return thumbnailService.nullPointerResponse(imageId);
+  @ExceptionHandler(Exception.class)
+  public void nullpointerErrorHandling(NoImageFoundException e, HttpServletResponse response) throws IOException {
+    response.sendError(HttpStatus.NOT_FOUND.value(), e.getMessage());
   }
 
   @PostMapping("/hotels/{hotelId}/thumbnails")
@@ -38,7 +38,7 @@ public class ThumbnailUploadRestController {
 
   @GetMapping("/hotels/{hotelId}/thumbnails/{imageId}")
   @ResponseStatus(HttpStatus.OK)
-  public ThumbnailResponse thumbnailSingleTumbnail(@PathVariable long hotelId, @PathVariable long imageId) {
+  public ThumbnailResponse thumbnailSingleTumbnail(@PathVariable long hotelId, @PathVariable long imageId) throws Exception {
     return thumbnailService.createSingleImageResponse(hotelId, imageId);
   }
 
