@@ -5,9 +5,10 @@ import com.greenfox.malachit.service.ThumbnailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ThumbnailUploadRestController {
@@ -20,8 +21,15 @@ public class ThumbnailUploadRestController {
   }
 
   @ExceptionHandler(Exception.class)
-  public void nullpointerErrorHandling(NoImageFoundException e, HttpServletResponse response) throws IOException {
-    response.sendError(HttpStatus.NOT_FOUND.value(), e.getMessage());
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  public Map<String, Object> handleMissingParam(NoImageFoundException e) {
+
+    Map<String, Object> result = new HashMap();
+    List<ErrorReturnObject> errors = new ArrayList<>();
+
+    errors.add(new ErrorReturnObject("404", "not found", e.getMessage()));
+    result.put("errors", errors);
+    return result;
   }
 
   @PostMapping("/hotels/{hotelId}/thumbnails")
