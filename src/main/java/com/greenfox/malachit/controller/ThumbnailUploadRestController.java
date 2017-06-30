@@ -23,7 +23,7 @@ public class ThumbnailUploadRestController {
     this.thumbnailService = thumbnailService;
   }
 
-  @ExceptionHandler(Exception.class)
+  @ExceptionHandler(NoImageFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public Map<String, Object> handleMissingParam(NoImageFoundException e) {
     return errorHandlerService.getResponse(e);
