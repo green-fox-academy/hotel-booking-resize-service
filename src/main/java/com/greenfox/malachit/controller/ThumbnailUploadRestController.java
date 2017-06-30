@@ -1,6 +1,7 @@
 package com.greenfox.malachit.controller;
 
 import com.greenfox.malachit.model.*;
+import com.greenfox.malachit.service.ErrorHandlerService;
 import com.greenfox.malachit.service.ThumbnailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,22 +15,18 @@ import java.util.Map;
 public class ThumbnailUploadRestController {
 
   private ThumbnailService thumbnailService;
+  private ErrorHandlerService errorHandlerService;
 
   @Autowired
-  public ThumbnailUploadRestController(ThumbnailService thumbnailService) {
+  public ThumbnailUploadRestController(ThumbnailService thumbnailService, ErrorHandlerService errorHandlerService) {
+    this.errorHandlerService = errorHandlerService;
     this.thumbnailService = thumbnailService;
   }
 
   @ExceptionHandler(Exception.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public Map<String, Object> handleMissingParam(NoImageFoundException e) {
-
-    Map<String, Object> result = new HashMap();
-    List<ErrorReturnObject> errors = new ArrayList<>();
-
-    errors.add(new ErrorReturnObject("404", "not found", e.getMessage()));
-    result.put("errors", errors);
-    return result;
+    return errorHandlerService.getResponse(e);
   }
 
   @PostMapping("/hotels/{hotelId}/thumbnails")
