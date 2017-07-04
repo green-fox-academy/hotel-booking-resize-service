@@ -43,7 +43,7 @@ public class ThumbnailUploadRestController {
   @ResponseStatus(HttpStatus.OK)
   public ThumbnailResponse thumbnailFilteredMainListing(@PathVariable long hotelId, @RequestParam LinkedHashMap<String, Object> allRequestParams,
                                                         HttpServletRequest request) {
-    return thumbnailService.getListingResponse(hotelId, paramToUserSpecService.getParameters(allRequestParams));
+    return thumbnailService.getListingResponse(hotelId, paramToUserSpecService.getParameters(allRequestParams), request);
   }
 
   @GetMapping("/hotels/{hotelId}/thumbnails/{imageId}")

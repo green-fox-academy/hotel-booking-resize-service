@@ -2,9 +2,12 @@ package com.greenfox.malachit.service;
 
 import com.greenfox.malachit.model.*;
 import com.greenfox.malachit.repository.ThumbnailRepository;
+import org.apache.http.protocol.HTTP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,8 +68,8 @@ public class ThumbnailService {
     return toReturn;
   }
 
-  public ThumbnailResponse getListingResponse(long hotelId, Specification<ThumbnailAttributes> specification) {
-    return createMainFilteredResponse(hotelId, specification);
+  public ThumbnailResponse getListingResponse(long hotelId, Specification<ThumbnailAttributes> specification, HttpServletRequest request) {
+    return createMainFilteredResponse(hotelId, specification, request);
   }
 
 //  public List<ThumbnailAttributes> sortWithCustomQuery(Specification<ThumbnailAttributes> specification) {
@@ -86,10 +89,10 @@ public class ThumbnailService {
 //  }
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-  public ThumbnailResponse createMainFilteredResponse(long hotelId, Specification<ThumbnailAttributes> specification) {
+  public ThumbnailResponse createMainFilteredResponse(long hotelId, Specification<ThumbnailAttributes> specification, HttpServletRequest request) {
     ThumbnailResponse toReturn = new ThumbnailResponse();
     toReturn.setData(createFilteredListingData(hotelId, specification));
-    toReturn.setLinks(new SelfUrl(this.createFilteredListingUrl(hotelId)));
+    toReturn.setLinks(new SelfUrl(this.createFilteredListingUrl(request)));
     return toReturn;
   }
 
@@ -100,8 +103,13 @@ public class ThumbnailService {
     return toReturn;
   }
 
-  public String createFilteredListingUrl(long hotelId) {
-    return "https://your-hostname.com/hotels/" + hotelId + "/thumbnails?is_main=true";
+  public String createFilteredListingUrl(HttpServletRequest request) {
+    String uri = request.getScheme() + "://" +
+            request.getServerName() +
+            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) +
+            request.getRequestURI() +
+            (request.getQueryString() != null ? "?" + request.getQueryString() : "");
+    return uri;
   }
 
   public String createSingleImageUrl(long hotelId, long imageId) {
