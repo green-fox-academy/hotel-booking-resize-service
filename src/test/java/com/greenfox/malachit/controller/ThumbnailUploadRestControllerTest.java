@@ -14,9 +14,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
 import java.nio.charset.Charset;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ThumbnailUploadRestControllerTest {
+
   private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
           MediaType.APPLICATION_JSON.getSubtype(),
           Charset.forName("utf8"));
@@ -44,12 +45,12 @@ public class ThumbnailUploadRestControllerTest {
       new ThumbnailUploadRestController(thumbnailService, errorHandlerService);
 
   private long testHotelId = 6L;
-
   private long testThumbnailAttributesId = 7L;
   private boolean testIsMain = true;
   private boolean testUploaded = false;
   private String testCreatedAt = "2017-07-03T20:56:53.097";
   private ThumbnailResponse thumbnailResponse;
+
   @Before
   public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
@@ -66,6 +67,23 @@ public class ThumbnailUploadRestControllerTest {
     thumbnailAttributesDTO.setUploaded(testUploaded);
     fileData.setAttributes(thumbnailAttributesDTO);
     thumbnailResponse.setData(fileData);
+  }
+
+  @Test
+  public void deleteSingleThumbnail() throws Exception {
+    LinkResponse testLinkResponse = new LinkResponse();
+    testLinkResponse.setLinks(new SelfUrl("https://your-hostname.com/hotels/6/thumbnails/7"));
+    Mockito.when(thumbnailService.deleteSingleThumbnail(testHotelId, testThumbnailAttributesId))
+        .thenReturn(testLinkResponse);
+    mockMvc
+            .perform(delete("/hotels/{hotelId}/thumbnails/{imageId}", testHotelId, testThumbnailAttributesId))
+            .andExpect(status().isOk())
+            .andExpect(content()
+                    .json("{\n" +
+                            "  \"links\": {\n" +
+                            "    \"self\": \"https://your-hostname.com/hotels/6/thumbnails/7\"\n" +
+                            "  }\n" +
+                            "}"));
   }
 
   @Test
