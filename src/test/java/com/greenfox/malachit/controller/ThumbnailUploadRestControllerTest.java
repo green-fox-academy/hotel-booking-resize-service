@@ -48,17 +48,13 @@ public class ThumbnailUploadRestControllerTest {
   private boolean testIsMain = true;
   private boolean testUploaded = false;
   private String testCreatedAt = "2017-07-03T20:56:53.097";
+  private ThumbnailResponse thumbnailResponse;
 
   @Before
   public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
     mockMvc = MockMvcBuilders.standaloneSetup(thumbnailUploadRestController).build();
-  }
-
-  @Test
-  public void addThumbnail() throws Exception {
-    String jsonn = "{\"data\": {\"type\": \"thumbnails\",\"attributes\": {\"is_main\": true}}}";
-    ThumbnailResponse thumbnailResponse = new ThumbnailResponse();
+    thumbnailResponse = new ThumbnailResponse();
     thumbnailResponse.setLinks(new SelfUrl("https://your-hostname.com/hotels/6/thumbnails/7"));
     FileData fileData = new FileData();
     fileData.setId(testThumbnailAttributesId);
@@ -70,10 +66,15 @@ public class ThumbnailUploadRestControllerTest {
     thumbnailAttributesDTO.setUploaded(testUploaded);
     fileData.setAttributes(thumbnailAttributesDTO);
     thumbnailResponse.setData(fileData);
+  }
+
+  @Test
+  public void addThumbnailIsMainTrue() throws Exception {
+    String incomingJson = "{\"data\": {\"type\": \"thumbnails\",\"attributes\": {\"is_main\": true}}}";
     Mockito.when(thumbnailService.createResponse(testIsMain, testHotelId)).thenReturn(thumbnailResponse);
     mockMvc
         .perform(post("/hotels/{hotelId}/thumbnails", testHotelId)
-                .contentType(contentType).content(jsonn))
+                .contentType(contentType).content(incomingJson))
             .andExpect(status().isCreated())
             .andExpect(content()
                     .json("{\n" +
@@ -92,4 +93,42 @@ public class ThumbnailUploadRestControllerTest {
                             "  }\n" +
                             "}"));
   }
+
+  @Test
+  public void addThumbnailNoIsMain() throws Exception {
+    String incomingJson = "{\"data\": {\"type\": \"thumbnails\",\"attributes\": { }}}";
+    FileData fileData = new FileData();
+    fileData.setId(testThumbnailAttributesId);
+    fileData.setType("thumbnails");
+    ThumbnailAttributesDTO thumbnailAttributesDTO = new ThumbnailAttributesDTO();
+    thumbnailAttributesDTO.setContent_url("https://your-hostname.com/media/images/7/content");
+    thumbnailAttributesDTO.setCreated_at(testCreatedAt);
+    thumbnailAttributesDTO.setIs_main(false);
+    thumbnailAttributesDTO.setUploaded(testUploaded);
+    fileData.setAttributes(thumbnailAttributesDTO);
+    thumbnailResponse.setData(fileData);
+    Mockito.when(thumbnailService.createResponse(false, testHotelId)).thenReturn(thumbnailResponse);
+    mockMvc
+            .perform(post("/hotels/{hotelId}/thumbnails", testHotelId)
+                    .contentType(contentType).content(incomingJson))
+            .andExpect(status().isCreated())
+            .andExpect(content()
+                    .json("{\n" +
+                            "  \"links\": {\n" +
+                            "    \"self\": \"https://your-hostname.com/hotels/6/thumbnails/7\"\n" +
+                            "  },\n" +
+                            "  \"data\": {\n" +
+                            "    \"type\": \"thumbnails\",\n" +
+                            "    \"id\": 7,\n" +
+                            "    \"attributes\": {\n" +
+                            "      \"is_main\": false,\n" +
+                            "      \"uploaded\": false,\n" +
+                            "      \"created_at\": \"2017-07-03T20:56:53.097\",\n" +
+                            "      \"content_url\": \"https://your-hostname.com/media/images/7/content\"\n" +
+                            "    }\n" +
+                            "  }\n" +
+                            "}"));
+  }
+
+
 }
