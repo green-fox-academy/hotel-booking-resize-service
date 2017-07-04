@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.nio.charset.Charset;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -25,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ThumbnailUploadRestControllerTest {
-
   private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
           MediaType.APPLICATION_JSON.getSubtype(),
           Charset.forName("utf8"));
@@ -44,12 +44,12 @@ public class ThumbnailUploadRestControllerTest {
       new ThumbnailUploadRestController(thumbnailService, errorHandlerService);
 
   private long testHotelId = 6L;
+
   private long testThumbnailAttributesId = 7L;
   private boolean testIsMain = true;
   private boolean testUploaded = false;
   private String testCreatedAt = "2017-07-03T20:56:53.097";
   private ThumbnailResponse thumbnailResponse;
-
   @Before
   public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
@@ -66,6 +66,30 @@ public class ThumbnailUploadRestControllerTest {
     thumbnailAttributesDTO.setUploaded(testUploaded);
     fileData.setAttributes(thumbnailAttributesDTO);
     thumbnailResponse.setData(fileData);
+  }
+
+  @Test
+  public void thumbnailSingleThumbnail() throws Exception {
+    Mockito.when(thumbnailService.createSingleImageResponse(testHotelId, testThumbnailAttributesId)).thenReturn(thumbnailResponse);
+    mockMvc
+            .perform(get("/hotels/{hotelId}/thumbnails/{imageId}", testHotelId, testThumbnailAttributesId))
+            .andExpect(status().isOk())
+            .andExpect(content()
+                    .json("{\n" +
+                            "  \"links\": {\n" +
+                            "    \"self\": \"https://your-hostname.com/hotels/6/thumbnails/7\"\n" +
+                            "  },\n" +
+                            "  \"data\": {\n" +
+                            "    \"type\": \"thumbnails\",\n" +
+                            "    \"id\": 7,\n" +
+                            "    \"attributes\": {\n" +
+                            "      \"is_main\": true,\n" +
+                            "      \"uploaded\": false,\n" +
+                            "      \"created_at\": \"2017-07-03T20:56:53.097\",\n" +
+                            "      \"content_url\": \"https://your-hostname.com/media/images/7/content\"\n" +
+                            "    }\n" +
+                            "  }\n" +
+                            "}"));
   }
 
   @Test
@@ -129,6 +153,4 @@ public class ThumbnailUploadRestControllerTest {
                             "  }\n" +
                             "}"));
   }
-
-
 }
