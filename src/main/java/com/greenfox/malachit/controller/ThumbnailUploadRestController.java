@@ -2,10 +2,14 @@ package com.greenfox.malachit.controller;
 
 import com.greenfox.malachit.model.*;
 import com.greenfox.malachit.service.ErrorHandlerService;
+import com.greenfox.malachit.service.ParamToUserSpecService;
 import com.greenfox.malachit.service.ThumbnailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestController
@@ -13,6 +17,9 @@ public class ThumbnailUploadRestController {
 
   private ThumbnailService thumbnailService;
   private ErrorHandlerService errorHandlerService;
+
+  @Autowired
+  ParamToUserSpecService paramToUserSpecService;
 
   @Autowired
   public ThumbnailUploadRestController(ThumbnailService thumbnailService, ErrorHandlerService errorHandlerService) {
@@ -34,8 +41,9 @@ public class ThumbnailUploadRestController {
 
   @GetMapping("/hotels/{hotelId}/thumbnails")
   @ResponseStatus(HttpStatus.OK)
-  public ThumbnailResponse thumbnailFilteredMainListing(@PathVariable long hotelId, @RequestParam(value = "is_main", defaultValue = "false") boolean is_main) {
-    return thumbnailService.getListingResponse(hotelId, is_main);
+  public ThumbnailResponse thumbnailFilteredMainListing(@PathVariable long hotelId, @RequestParam LinkedHashMap<String, Object> allRequestParams,
+                                                        HttpServletRequest request) {
+    return thumbnailService.getListingResponse(hotelId, paramToUserSpecService.getParameters(allRequestParams), request);
   }
 
   @GetMapping("/hotels/{hotelId}/thumbnails/{imageId}")

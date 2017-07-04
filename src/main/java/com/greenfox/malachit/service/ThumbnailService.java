@@ -2,8 +2,12 @@ package com.greenfox.malachit.service;
 
 import com.greenfox.malachit.model.*;
 import com.greenfox.malachit.repository.ThumbnailRepository;
+import org.apache.http.protocol.HTTP;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,26 +68,14 @@ public class ThumbnailService {
     return toReturn;
   }
 
-  public ThumbnailResponse getListingResponse(long hotelId, boolean is_main) {
-    if(is_main) {
-      return createMainFilteredResponse(hotelId);
-    }
-    else {
-      return createListingResponse(hotelId);
-    }
+  public ThumbnailResponse getListingResponse(long hotelId, Specification<ThumbnailAttributes> specification, HttpServletRequest request) {
+    return createMainFilteredResponse(hotelId, specification, request);
   }
 
-  public ThumbnailResponse createListingResponse(long hotelId) {
+  public ThumbnailResponse createMainFilteredResponse(long hotelId, Specification<ThumbnailAttributes> specification, HttpServletRequest request) {
     ThumbnailResponse toReturn = new ThumbnailResponse();
-    toReturn.setData(createListingData(hotelId));
-    toReturn.setLinks(new SelfUrl(this.createListingUrl(hotelId)));
-    return toReturn;
-  }
-
-  public ThumbnailResponse createMainFilteredResponse(long hotelId) {
-    ThumbnailResponse toReturn = new ThumbnailResponse();
-    toReturn.setData(createFilteredListingData(hotelId));
-    toReturn.setLinks(new SelfUrl(this.createFilteredListingUrl(hotelId)));
+    toReturn.setData(createFilteredListingData(hotelId, specification));
+    toReturn.setLinks(new SelfUrl(this.createFilteredListingUrl(request)));
     return toReturn;
   }
 
@@ -94,38 +86,30 @@ public class ThumbnailService {
     return toReturn;
   }
 
-  public String createFilteredListingUrl(long hotelId) {
-    return "https://your-hostname.com/hotels/" + hotelId + "/thumbnails?is_main=true";
+  public String createFilteredListingUrl(HttpServletRequest request) {
+    String uri = request.getScheme() + "://" +
+            request.getServerName() +
+            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) +
+            request.getRequestURI() +
+            (request.getQueryString() != null ? "?" + request.getQueryString() : "");
+    return uri;
   }
 
   public String createSingleImageUrl(long hotelId, long imageId) {
     return "https://your-hostname.com/api/hotels/" + hotelId + "/thumbnails/" + imageId;
   }
 
-  public String createListingUrl(long hotelId) {
-    return "https://your-hostname.com/hotels/" + hotelId + "/thumbnails";
-  }
-
-  public List<FileData> createFilteredListingData(long hotelId) {
+  public List<FileData> createFilteredListingData(long hotelId, Specification<ThumbnailAttributes> specification) {
     List<FileData> toReturn = new ArrayList<>();
-    List<ThumbnailAttributes> thumbnails= thumbnailRepository.findAllByHotelEquals(hotelId);
+    List<ThumbnailAttributes> thumbnails= thumbnailRepository.findAll(specification);
     for (ThumbnailAttributes thumbnailAttributes : thumbnails) {
-      if (thumbnailAttributes.isIs_main()) {
+      if(thumbnailAttributes.getHotel() == hotelId) {
         toReturn.add(createThumbnailListElements(thumbnailAttributes));
       }
     }
     return toReturn;
   }
-
-  public List<FileData> createListingData(long hotelId) {
-    List<FileData> toReturn = new ArrayList<>();
-    List<ThumbnailAttributes> thumbnails= thumbnailRepository.findAllByHotelEquals(hotelId);
-    for (ThumbnailAttributes thumbnailAttributes : thumbnails) {
-      toReturn.add(createThumbnailListElements(thumbnailAttributes));
-    }
-    return toReturn;
-  }
-
+  
   public FileData createSingleImageData(long hotelId, long imageId) throws Exception{
     if(thumbnailRepository.exists(imageId)) {
       FileData toReturn = new FileData();
