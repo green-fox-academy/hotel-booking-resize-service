@@ -48,7 +48,7 @@ public class ThumbnailUploadRestController {
 
   @GetMapping("/hotels/{hotelId}/thumbnails/{imageId}")
   @ResponseStatus(HttpStatus.OK)
-  public ThumbnailResponse thumbnailSingleTumbnail(@PathVariable long hotelId, @PathVariable long imageId) throws Exception {
+  public ThumbnailResponse thumbnailSingleThumbnail(@PathVariable long hotelId, @PathVariable long imageId) throws Exception {
     return thumbnailService.createSingleImageResponse(hotelId, imageId);
   }
 
