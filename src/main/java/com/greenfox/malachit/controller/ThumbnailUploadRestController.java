@@ -6,9 +6,6 @@ import com.greenfox.malachit.service.ThumbnailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -23,7 +20,7 @@ public class ThumbnailUploadRestController {
     this.thumbnailService = thumbnailService;
   }
 
-  @ExceptionHandler(Exception.class)
+  @ExceptionHandler(NoImageFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public Map<String, Object> handleMissingParam(NoImageFoundException e) {
     return errorHandlerService.getResponse(e);
