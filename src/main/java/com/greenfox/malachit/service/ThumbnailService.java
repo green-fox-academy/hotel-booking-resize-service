@@ -72,23 +72,6 @@ public class ThumbnailService {
     return createMainFilteredResponse(hotelId, specification, request);
   }
 
-//  public List<ThumbnailAttributes> sortWithCustomQuery(Specification<ThumbnailAttributes> specification) {
-//    try {
-//      return thumbnailRepository.findAll(specification);
-//    } catch (Exception e) {
-//      System.out.println(e);
-//      return null;
-//    }
-//  }
-
-//  public ThumbnailResponse createListingResponse(long hotelId) {
-//    ThumbnailResponse toReturn = new ThumbnailResponse();
-//    toReturn.setData(createListingData(hotelId));
-//    toReturn.setLinks(new SelfUrl(this.createListingUrl(hotelId)));
-//    return toReturn;
-//  }
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
   public ThumbnailResponse createMainFilteredResponse(long hotelId, Specification<ThumbnailAttributes> specification, HttpServletRequest request) {
     ThumbnailResponse toReturn = new ThumbnailResponse();
     toReturn.setData(createFilteredListingData(hotelId, specification));
@@ -116,11 +99,6 @@ public class ThumbnailService {
     return "https://your-hostname.com/api/hotels/" + hotelId + "/thumbnails/" + imageId;
   }
 
-//  public String createListingUrl(long hotelId) {
-//    return "https://your-hostname.com/hotels/" + hotelId + "/thumbnails";
-//  }
-
-  //"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
   public List<FileData> createFilteredListingData(long hotelId, Specification<ThumbnailAttributes> specification) {
     List<FileData> toReturn = new ArrayList<>();
     List<ThumbnailAttributes> thumbnails= thumbnailRepository.findAll(specification);
@@ -131,16 +109,7 @@ public class ThumbnailService {
     }
     return toReturn;
   }
-
-//  public List<FileData> createListingData(long hotelId) {
-//    List<FileData> toReturn = new ArrayList<>();
-//    List<ThumbnailAttributes> thumbnails= thumbnailRepository.findAllByHotelEquals(hotelId);
-//    for (ThumbnailAttributes thumbnailAttributes : thumbnails) {
-//      toReturn.add(createThumbnailListElements(thumbnailAttributes));
-//    }
-//    return toReturn;
-//  }
-
+  
   public FileData createSingleImageData(long hotelId, long imageId) throws Exception{
     if(thumbnailRepository.exists(imageId)) {
       FileData toReturn = new FileData();
