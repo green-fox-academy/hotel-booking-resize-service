@@ -5,10 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
 @NoArgsConstructor
-@Getter
+@AllArgsConstructor
 @Setter
-public class ImageResponse {
-  private FileDataDTO data;
+@Getter
+public class LinkResponse {
+  SelfUrl links;
 }

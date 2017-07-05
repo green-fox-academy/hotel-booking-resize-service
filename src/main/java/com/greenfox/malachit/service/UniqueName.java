@@ -1,11 +1,13 @@
 package com.greenfox.malachit.service;
 
+import com.greenfox.malachit.model.ImageData;
 import com.greenfox.malachit.repository.ImageDataRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
 
 @Service
 @NoArgsConstructor
@@ -40,8 +42,9 @@ public class UniqueName {
 
   private boolean isRandom(String name) {
     boolean random = true;
-    for (Long i = 1L; i < imageDataRepository.count() + 1; i++) {
-      String url = imageDataRepository.findOne(i).getUrl();
+    ArrayList<ImageData> imageDataArrayList = imageDataRepository.findAll();
+    for (ImageData actual : imageDataArrayList) {
+      String url = actual.getUrl();
       String usedName = url.substring(url.indexOf(SEPARATOR) - NAMELENGTH, url.indexOf(SEPARATOR));
       if (name.equals(usedName)) {
         random = false;
