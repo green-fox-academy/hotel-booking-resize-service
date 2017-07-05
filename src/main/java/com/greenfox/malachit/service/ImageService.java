@@ -40,7 +40,7 @@ public class ImageService {
   public ImageResponse createResponse(MultipartFile file) throws Exception {
     String imageDataUrl = uploadImage(file);
     ImageResponse imageResponse = new ImageResponse();
-    ImageData imageData = new ImageData(imageDataUrl);
+    ImageData imageData = new ImageData(imageDataUrl + ".jpeg");
     FileDataDTO fileData = new FileDataDTO(checkTypeService.checkIfImage(file.getContentType()), imageData);
     imageDataRepository.save(imageData);
     imageResponse.setData(fileData);
@@ -50,18 +50,20 @@ public class ImageService {
   public String uploadImage(MultipartFile file) throws Exception {
     AmazonS3 s3client = new AmazonS3Client(new EnvironmentVariableCredentialsProvider());
     UniqueName uniqueName = new UniqueName(imageDataRepository);
-    String keyName = uniqueName.createUniqueName() + ".jpeg";
+    String keyName = uniqueName.createUniqueName();
     File thumbnail = resizeImage(file);
     File convertedFile = convert(file);
     try {
       s3client.putObject(new PutObjectRequest(
-              bucketName, keyName, convertedFile));
+              bucketName, keyName + "_200x150" + ".jpeg", thumbnail));
+      s3client.putObject(new PutObjectRequest(
+              bucketName, keyName +  ".jpeg", convertedFile));
     } catch (AmazonServiceException ase) {
       System.out.println(ase.getMessage());
     } catch (AmazonClientException ace) {
       System.out.println(ace.getMessage());
     }
-    convertedFile.delete();
+//    convertedFile.delete();
     return BUCKETURL + keyName;
   }
 
@@ -75,10 +77,10 @@ public class ImageService {
   }
 
   public File resizeImage(MultipartFile toResize) throws IOException {
-    File resizedFile = new File(toResize.getOriginalFilename());
+    File resizedFile = new File("thumb" + toResize.getOriginalFilename());
     resizedFile.createNewFile();
     FileOutputStream fos = new FileOutputStream(resizedFile);
-    Thumbnails.of(ImageIO.read(toResize.getInputStream())).crop(Positions.CENTER).size(200,150).keepAspectRatio(true).toOutputStream(fos);
+    Thumbnails.of(ImageIO.read(toResize.getInputStream())).crop(Positions.CENTER).outputFormat("jpg").size(200,150).keepAspectRatio(true).toOutputStream(fos);
     fos.close();
     return resizedFile;
   }
