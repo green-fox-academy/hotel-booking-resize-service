@@ -29,6 +29,7 @@ dependencies {
     compile group: 'net.minidev', name: 'json-smart', version: '2.3'
     compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.2.0'
     compile group: 'net.minidev', name: 'asm', version: '1.0.2'
+    compile group: 'net.coobird', name: 'thumbnailator', version: '0.4.8'
 	runtime('org.postgresql:postgresql')
 	compileOnly('org.projectlombok:lombok')
 	testCompile('org.springframework.boot:spring-boot-starter-test')

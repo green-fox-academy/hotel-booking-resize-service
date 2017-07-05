@@ -11,12 +11,17 @@ import com.greenfox.malachit.model.FileDataDTO;
 import com.greenfox.malachit.model.ImageData;
 import com.greenfox.malachit.model.ImageResponse;
 import com.greenfox.malachit.repository.ImageDataRepository;
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.geometry.Positions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 @Service
 public class ImageService {
@@ -66,5 +71,14 @@ public class ImageService {
     fos.write(file.getBytes());
     fos.close();
     return convertedFile;
+  }
+
+  public File resizeImage(MultipartFile toResize) throws IOException {
+    File resizedFile = new File(toResize.getOriginalFilename());
+    resizedFile.createNewFile();
+    FileOutputStream fos = new FileOutputStream(resizedFile);
+    Thumbnails.of(ImageIO.read(toResize.getInputStream())).crop(Positions.CENTER).size(200,150).keepAspectRatio(true).toOutputStream(fos);
+    fos.close();
+    return resizedFile;
   }
 }
