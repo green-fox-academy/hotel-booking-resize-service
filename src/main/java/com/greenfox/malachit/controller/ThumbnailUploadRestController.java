@@ -52,9 +52,9 @@ public class ThumbnailUploadRestController {
     return thumbnailService.createSingleImageResponse(hotelId, imageId);
   }
 
-  @DeleteMapping("/hotels/{hotelId}/thumbnails/{thumbnailId}")
+  @DeleteMapping("/hotels/{hotelId}/thumbnails/{imageId}")
   @ResponseStatus(HttpStatus.OK)
-  public LinkResponse deleteSingleThumbnail(@PathVariable long hotelId, @PathVariable long thumbnailId) {
-    return thumbnailService.deleteSingleThumbnail(hotelId, thumbnailId);
+  public LinkResponse deleteSingleThumbnail(@PathVariable long hotelId, @PathVariable long imageId) {
+    return thumbnailService.deleteSingleThumbnail(hotelId, imageId);
   }
 }

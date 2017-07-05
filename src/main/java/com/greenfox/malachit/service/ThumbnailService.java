@@ -132,10 +132,14 @@ public class ThumbnailService {
     return toReturn;
   }
 
-  public LinkResponse deleteSingleThumbnail(long hotelId, long thumbnailId) {
-    LinkResponse linkResponse = new LinkResponse();
-    linkResponse.setLinks(new SelfUrl(this.createSelfUrl(hotelId, thumbnailId)));
-    thumbnailRepository.delete(thumbnailId);
-    return linkResponse;
+  public LinkResponse deleteSingleThumbnail(long hotelId, long imageId) {
+    if (thumbnailRepository.exists(imageId)) {
+      LinkResponse linkResponse = new LinkResponse();
+      linkResponse.setLinks(new SelfUrl(this.createSelfUrl(hotelId, imageId)));
+      thumbnailRepository.delete(imageId);
+      return linkResponse;
+    } else {
+      throw new NoImageFoundException(Long.toString(imageId));
+    }
   }
 }
