@@ -32,7 +32,7 @@ public class ImageService {
     this.checkTypeService = checkTypeService;
   }
 
-  public ImageResponse createResponse(MultipartFile file) throws Exception {
+  public ImageResponse createResponse(MultipartFile file, long id) throws Exception {
     String imageDataUrl = uploadImage(file);
     ImageResponse imageResponse = new ImageResponse();
     ImageData imageData = new ImageData(imageDataUrl);
