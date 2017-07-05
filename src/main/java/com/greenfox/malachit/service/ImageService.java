@@ -51,6 +51,7 @@ public class ImageService {
     AmazonS3 s3client = new AmazonS3Client(new EnvironmentVariableCredentialsProvider());
     UniqueName uniqueName = new UniqueName(imageDataRepository);
     String keyName = uniqueName.createUniqueName() + ".jpeg";
+    File thumbnail = resizeImage(file);
     File convertedFile = convert(file);
     try {
       s3client.putObject(new PutObjectRequest(
