@@ -6,10 +6,7 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.greenfox.malachit.model.FileData;
-import com.greenfox.malachit.model.FileDataDTO;
-import com.greenfox.malachit.model.ImageData;
-import com.greenfox.malachit.model.ImageResponse;
+import com.greenfox.malachit.model.*;
 import com.greenfox.malachit.repository.ImageDataRepository;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Positions;
@@ -37,20 +34,21 @@ public class ImageService {
     this.checkTypeService = checkTypeService;
   }
 
-  public ImageResponse createResponse(MultipartFile file) throws Exception {
-    String imageDataUrl = uploadImage(file);
+  public ImageResponse createResponse(MultipartFile file, long id) throws Exception {
+    String uniqueName = new UniqueName().createUniqueName();
+    uploadImage(file, uniqueName);
+    String imageThumbnailUrl = "/media/images/" + id + "/resize/200/150";
     ImageResponse imageResponse = new ImageResponse();
-    ImageData imageData = new ImageData(imageDataUrl + ".jpeg");
-    FileDataDTO fileData = new FileDataDTO(checkTypeService.checkIfImage(file.getContentType()), imageData);
+    ImageData imageData = new ImageData(id, uniqueName);
+    ImageDataDTO imageDataDTO = new ImageDataDTO(id, imageThumbnailUrl);
+    FileDataDTO fileData = new FileDataDTO(checkTypeService.checkIfImage(file.getContentType()), imageDataDTO);
     imageDataRepository.save(imageData);
     imageResponse.setData(fileData);
     return imageResponse;
   }
 
-  public String uploadImage(MultipartFile file) throws Exception {
+  public void uploadImage(MultipartFile file, String keyName) throws Exception {
     AmazonS3 s3client = new AmazonS3Client(new EnvironmentVariableCredentialsProvider());
-    UniqueName uniqueName = new UniqueName(imageDataRepository);
-    String keyName = uniqueName.createUniqueName();
     File thumbnail = resizeImage(file);
     File convertedFile = convert(file);
     try {
@@ -64,7 +62,6 @@ public class ImageService {
       System.out.println(ace.getMessage());
     }
 //    convertedFile.delete();
-    return BUCKETURL + keyName;
   }
 
   public File convert(MultipartFile file) throws Exception {

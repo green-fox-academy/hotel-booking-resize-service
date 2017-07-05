@@ -17,12 +17,9 @@ public class UniqueName {
   private static int NAMELENGTH = 12;
   private static String SEPARATOR = ".jp";
   private static SecureRandom srnd = new SecureRandom();
-  private ImageDataRepository imageDataRepository;
 
   @Autowired
-  public UniqueName(ImageDataRepository imageDataRepository) {
-    this.imageDataRepository = imageDataRepository;
-  }
+  private ImageDataRepository imageDataRepository;
 
   public String createUniqueName() {
     String name = randomName();
@@ -44,9 +41,8 @@ public class UniqueName {
     boolean random = true;
     ArrayList<ImageData> imageDataArrayList = imageDataRepository.findAll();
     for (ImageData actual : imageDataArrayList) {
-      String url = actual.getUrl();
-      String usedName = url.substring(url.indexOf(SEPARATOR) - NAMELENGTH, url.indexOf(SEPARATOR));
-      if (name.equals(usedName)) {
+      String actualUniqueName = actual.getUniqueName();
+      if (name.equals(actualUniqueName)) {
         random = false;
       }
     }
