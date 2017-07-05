@@ -16,11 +16,11 @@ import javax.persistence.Id;
 public class ImageData {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
-  private String url;
+  private String uniqueName;
 
-  public ImageData(String url) {
-    this.url = url;
+  public ImageData(long id, String uniqueName) {
+    this.id = id;
+    this.uniqueName = uniqueName;
   }
 }
