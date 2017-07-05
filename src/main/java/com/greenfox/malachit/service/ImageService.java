@@ -35,7 +35,7 @@ public class ImageService {
   }
 
   public ImageResponse createResponse(MultipartFile file, long id) throws Exception {
-    String uniqueName = new UniqueName().createUniqueName();
+    String uniqueName = new UniqueName(imageDataRepository).createUniqueName();
     uploadImage(file, uniqueName);
     String imageThumbnailUrl = "/media/images/" + id + "/resize/200/150";
     ImageResponse imageResponse = new ImageResponse();
