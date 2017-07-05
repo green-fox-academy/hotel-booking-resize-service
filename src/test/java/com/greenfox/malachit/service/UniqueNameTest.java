@@ -22,7 +22,7 @@ public class UniqueNameTest {
   @Test
   public void createUniqueName() throws Exception {
     ArrayList<ImageData> mockedImageDataArrayList = new ArrayList<>();
-    mockedImageDataArrayList.add(new ImageData("s3-eu-west-1.amazonaws.com/somebucket/hj2rtk4ds7pl.jpg"));
+    mockedImageDataArrayList.add(new ImageData(1L, "hj2rtk4ds7pl"));
     ImageDataRepository mockedImageDataRepository = Mockito.mock(ImageDataRepository.class);
     Mockito.when(mockedImageDataRepository.findAll()).thenReturn(mockedImageDataArrayList);
     UniqueName uniqueNameTested = new UniqueName(mockedImageDataRepository);
