@@ -30,7 +30,7 @@ public class ThumbnailUploadRestController {
   @ExceptionHandler(NoImageFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public Map<String, Object> handleMissingParam(NoImageFoundException e) {
-    return errorHandlerService.getResponse(e);
+    return errorHandlerService.getResponse(e, "404", "not found");
   }
 
   @PostMapping("/hotels/{hotelId}/thumbnails")

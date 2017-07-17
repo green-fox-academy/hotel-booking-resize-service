@@ -12,11 +12,11 @@ import java.util.Map;
 @Service
 public class ErrorHandlerService {
 
-  public Map<String, Object> getResponse(NoImageFoundException e) {
+  public Map<String, Object> getResponse(NoImageFoundException e, String status, String title) {
     Map<String, Object> result = new HashMap();
     List<ErrorReturnObject> errors = new ArrayList<>();
 
-    errors.add(new ErrorReturnObject("404", "not found", e.getMessage()));
+    errors.add(new ErrorReturnObject(status, title, e.getMessage()));
     result.put("errors", errors);
     return result;
   }

@@ -88,4 +88,10 @@ public class ImageService {
     fos.close();
     return resizedFile;
   }
+
+  public void checkFileSize(MultipartFile checkSizeOf) {
+    if (checkSizeOf.getSize() > 1000000) {
+      throw new FileTooLargeException();
+    }
+  }
 }
