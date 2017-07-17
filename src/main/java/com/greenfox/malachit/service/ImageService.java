@@ -1,10 +1,12 @@
 package com.greenfox.malachit.service;
 
-import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
+import com.amazonaws.auth.*;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.greenfox.malachit.model.*;
 import com.greenfox.malachit.repository.ImageDataRepository;
@@ -48,7 +50,12 @@ public class ImageService {
   }
 
   public void uploadImage(MultipartFile file, String keyName) throws Exception {
-    AmazonS3 s3client = new AmazonS3Client(new EnvironmentVariableCredentialsProvider());
+    AWSCredentialsProvider awsCredentialsProvider = new EnvironmentVariableCredentialsProvider();
+    AmazonS3 s3client = AmazonS3ClientBuilder
+            .standard()
+            .withRegion(Regions.EU_CENTRAL_1)
+            .withCredentials(awsCredentialsProvider)
+            .build();
     File thumbnail = resizeImage(file);
     File convertedFile = convert(file);
     try {
