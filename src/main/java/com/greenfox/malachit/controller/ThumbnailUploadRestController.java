@@ -33,6 +33,12 @@ public class ThumbnailUploadRestController {
     return errorHandlerService.getResponse(e, "404", "not found");
   }
 
+  @ExceptionHandler(FileTooLargeException.class)
+  @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
+  public Map<String, Object> handleFileTooLarge(FileTooLargeException e) {
+    return errorHandlerService.getResponse(e, "413", "The image cannot be bigger than 1MB");
+  }
+
   @PostMapping("/hotels/{hotelId}/thumbnails")
   @ResponseStatus(HttpStatus.CREATED)
   public ThumbnailResponse addThumbnail(@RequestBody IncomingDataMap incomingDataMap, @PathVariable long hotelId) throws Exception {

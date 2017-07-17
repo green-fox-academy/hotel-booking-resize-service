@@ -12,7 +12,7 @@ import java.util.Map;
 @Service
 public class ErrorHandlerService {
 
-  public Map<String, Object> getResponse(NoImageFoundException e, String status, String title) {
+  public Map<String, Object> getResponse(RuntimeException e, String status, String title) {
     Map<String, Object> result = new HashMap();
     List<ErrorReturnObject> errors = new ArrayList<>();
 
