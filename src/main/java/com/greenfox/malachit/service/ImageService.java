@@ -52,7 +52,7 @@ public class ImageService {
   }
 
   public void validateImage(MultipartFile toValidate) throws IOException {
-    if (checkTypeService.checkIfValidExtension(toValidate.getContentType())) {
+    if (!checkTypeService.checkIfValidExtension(toValidate.getContentType())) {
       throw new ImageExtensionNotValidException();
     }
     BufferedImage bufferedImage = ImageIO.read(toValidate.getInputStream());
