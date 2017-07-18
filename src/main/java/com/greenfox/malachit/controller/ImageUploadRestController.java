@@ -32,11 +32,13 @@ public class ImageUploadRestController {
   }
 
   @ExceptionHandler(ImageDimensionTooSmallException.class)
+  @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
   public Map<String, Object> handleImageDimensionTooSmall(ImageDimensionTooSmallException e) {
     return errorHandlerService.getResponse(e, "413", "Not Acceptable");
   }
 
   @ExceptionHandler(ImageExtensionNotValidException.class)
+  @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
   public Map<String, Object> handleExtensionNotSupported(ImageExtensionNotValidException e) {
     return errorHandlerService.getResponse(e, "406", "Not Acceptable");
   }
