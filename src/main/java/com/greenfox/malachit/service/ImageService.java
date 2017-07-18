@@ -59,8 +59,7 @@ public class ImageService {
     int height = bufferedImage.getHeight();
     int width = bufferedImage.getWidth();
     if (height < 150 || width < 200) {
-      //custom exception "413" "not accaptable"
-      throw new RuntimeException();
+      throw new ImageDimensionTooSmallException();
     }
   }
 
