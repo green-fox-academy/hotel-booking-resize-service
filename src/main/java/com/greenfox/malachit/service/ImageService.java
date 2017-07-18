@@ -53,8 +53,7 @@ public class ImageService {
 
   public void validateImage(MultipartFile toValidate) throws IOException {
     if (checkTypeService.checkIfValidExtension(toValidate.getContentType())) {
-      //custom exception "406" "not accaptable"
-      throw new RuntimeException();
+      throw new ImageExtensionNotValidException();
     }
     BufferedImage bufferedImage = ImageIO.read(toValidate.getInputStream());
     int height = bufferedImage.getHeight();
