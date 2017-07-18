@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,6 +38,7 @@ public class ImageService {
   }
 
   public ImageResponse createResponse(MultipartFile file, long id) throws Exception {
+    validateImage(file);
     String uniqueName = new UniqueName(imageDataRepository).createUniqueName();
     uploadImage(file, uniqueName);
     String imageThumbnailUrl = "/media/images/" + id + "/resize/200/150";
@@ -47,6 +49,20 @@ public class ImageService {
     imageDataRepository.save(imageData);
     imageResponse.setData(fileData);
     return imageResponse;
+  }
+
+  public void validateImage(MultipartFile toValidate) throws IOException {
+    if (checkTypeService.checkIfValidExtension(toValidate.getContentType())) {
+      //custom exception "406" "not accaptable"
+      throw new RuntimeException();
+    }
+    BufferedImage bufferedImage = ImageIO.read(toValidate.getInputStream());
+    int height = bufferedImage.getHeight();
+    int width = bufferedImage.getWidth();
+    if (height < 150 || width < 200) {
+      //custom exception "413" "not accaptable"
+      throw new RuntimeException();
+    }
   }
 
   public void uploadImage(MultipartFile file, String keyName) throws Exception {
