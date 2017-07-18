@@ -10,6 +10,6 @@ public class CheckTypeService {
   }
 
   public boolean checkIfValidExtension(String toValidate) {
-    return (toValidate.contains("jpeg") || toValidate.contains("gif") || toValidate.contains("png"));
+    return (toValidate.contains("jpeg") || toValidate.contains("gif") || toValidate.contains("png") || toValidate.contains("jpg"));
   }
 }
