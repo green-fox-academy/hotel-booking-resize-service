@@ -7,8 +7,14 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-public class ImageResponse {
-  private FileDataDTO data;
+public class CheckIfMain {
+  boolean is_main;
+
+  public void setIs_main(boolean is_main) {
+    this.is_main = is_main;
+  }
+
+  public boolean getIs_main() {
+    return this.is_main;
+  }
 }
