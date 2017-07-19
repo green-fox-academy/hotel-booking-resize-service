@@ -6,6 +6,7 @@ import com.greenfox.malachit.model.ImageExtensionNotValidException;
 import com.greenfox.malachit.model.ImageResponse;
 import com.greenfox.malachit.service.ErrorHandlerService;
 import com.greenfox.malachit.service.ImageService;
+import com.greenfox.malachit.service.MessageQueueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,11 +19,13 @@ public class ImageUploadRestController {
 
   private ImageService imageService;
   private ErrorHandlerService errorHandlerService;
+  private MessageQueueService messageQueueService;
 
   @Autowired
-  public ImageUploadRestController(ImageService imageService, ErrorHandlerService errorHandlerService) {
+  public ImageUploadRestController(ImageService imageService, ErrorHandlerService errorHandlerService, MessageQueueService messageQueueService) {
     this.imageService = imageService;
     this.errorHandlerService = errorHandlerService;
+    this.messageQueueService = messageQueueService;
   }
 
   @ExceptionHandler(FileTooLargeException.class)
@@ -45,6 +48,18 @@ public class ImageUploadRestController {
 
   @PostMapping(value="/media/images/{id}", headers="content-type=multipart/*")
   public ImageResponse getFile(@RequestParam("fileName") MultipartFile file, @PathVariable long id) throws Exception{
-    return  imageService.createResponse(file, id);
+    return imageService.createResponse(file, id);
+  }
+
+  @GetMapping("/in")
+  public String sendToTheQueue() throws Exception {
+    messageQueueService.sendTask("valami");
+    return "ok";
+  }
+
+  @GetMapping("/out")
+  public String receiveTusk() throws Exception {
+    messageQueueService.receiveTusk();
+    return "ok";
   }
 }

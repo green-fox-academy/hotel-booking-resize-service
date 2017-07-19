@@ -60,4 +60,14 @@ public class MessageQueueService {
     channel.close();
     connection.close();
   }
+
+  public void sendTask(String task) throws Exception {
+    SendThumbnailTask sendThumbnailTask = new SendThumbnailTask();
+    sendThumbnailTask.sendTask(task);
+  }
+
+  public void receiveTusk() throws Exception {
+    ReceiveThumbnailTusk receiveThumbnailTusk = new ReceiveThumbnailTusk();
+    receiveThumbnailTusk.receiveTusk();
+  }
 }
