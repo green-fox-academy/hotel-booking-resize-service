@@ -52,14 +52,13 @@ public class ImageUploadRestController {
   }
 
   @GetMapping("/in")
-  public String sendToTheQueue() throws Exception {
-    messageQueueService.sendTask("valami");
+  public String sendTask(@RequestParam("text") String text) throws Exception {
+    messageQueueService.sendTask(text);
     return "ok";
   }
 
   @GetMapping("/out")
-  public String receiveTusk() throws Exception {
-    messageQueueService.receiveTusk();
-    return "ok";
+  public String receiveTask() throws Exception {
+    return messageQueueService.receiveTask();
   }
 }

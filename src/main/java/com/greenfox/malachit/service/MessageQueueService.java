@@ -66,8 +66,8 @@ public class MessageQueueService {
     sendThumbnailTask.sendTask(task);
   }
 
-  public void receiveTusk() throws Exception {
-    ReceiveThumbnailTusk receiveThumbnailTusk = new ReceiveThumbnailTusk();
-    receiveThumbnailTusk.receiveTusk();
+  public String receiveTask() throws Exception {
+    ReceiveThumbnailTask receiveThumbnailTask = new ReceiveThumbnailTask();
+    return receiveThumbnailTask.receiveTask();
   }
 }

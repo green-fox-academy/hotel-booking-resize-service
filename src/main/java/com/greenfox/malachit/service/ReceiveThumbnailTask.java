@@ -4,11 +4,11 @@ import com.rabbitmq.client.*;
 
 import java.io.IOException;
 
-public class ReceiveThumbnailTusk {
+public class ReceiveThumbnailTask {
 
   private final static String QUEUE_NAME = "thumbnails";
 
-  public void receiveTusk() throws Exception {
+  public void receiveTask() throws Exception {
     Connection connection = initConnection();
     Channel channel = initChannel(connection);
     channel.queueDeclare(QUEUE_NAME, false, false, false, null);
@@ -38,8 +38,6 @@ public class ReceiveThumbnailTusk {
       }
     };
     channel.basicConsume(QUEUE_NAME, false, consumer);
-    System.out.println("consumed");
-
   }
 
   private Connection initConnection() throws Exception {
