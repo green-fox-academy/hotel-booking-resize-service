@@ -58,7 +58,7 @@ public class ImageUploadRestController {
   }
 
   @GetMapping("/out")
-  public String receiveTask() throws Exception {
-    return messageQueueService.receiveTask();
+  public void receiveTask() throws Exception {
+    messageQueueService.receiveTask();
   }
 }

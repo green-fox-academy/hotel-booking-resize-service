@@ -1,6 +1,9 @@
 package com.greenfox.malachit.service;
 
+import com.greenfox.malachit.repository.ImageDataRepository;
+import com.greenfox.malachit.repository.ThumbnailRepository;
 import com.rabbitmq.client.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -8,10 +11,19 @@ import java.io.IOException;
 @Service
 public class MessageQueueService {
 
+  ImageDataRepository imageDataRepository;
+  ThumbnailRepository thumbnailRepository;
+
   private final static String QUEUE_NAME = "hello";
   private ConnectionFactory factory ;
   private Connection connection;
   private Channel channel;
+
+  @Autowired
+  public MessageQueueService(ImageDataRepository imageDataRepository, ThumbnailRepository thumbnailRepository) {
+    this.imageDataRepository = imageDataRepository;
+    this.thumbnailRepository = thumbnailRepository;
+  }
 
   public void sendMessage() throws Exception{
     initMQ();
@@ -66,8 +78,8 @@ public class MessageQueueService {
     sendThumbnailTask.sendTask(task);
   }
 
-  public String receiveTask() throws Exception {
-    ReceiveThumbnailTask receiveThumbnailTask = new ReceiveThumbnailTask();
-    return receiveThumbnailTask.receiveTask();
+  public void receiveTask() throws Exception {
+    ReceiveThumbnailTask receiveThumbnailTask = new ReceiveThumbnailTask(imageDataRepository, thumbnailRepository);
+    receiveThumbnailTask.receiveTask();
   }
 }
