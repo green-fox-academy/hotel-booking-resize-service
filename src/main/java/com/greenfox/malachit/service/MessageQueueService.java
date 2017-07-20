@@ -29,7 +29,7 @@ public class MessageQueueService {
     initMQ();
     channel.queueDeclare(QUEUE_NAME, false, false, false, null);
     String message = "ok";
-    channel.basicPublish("", QUEUE_NAME, MessageProperties.PERSISTENT_TEXT_PLAIN,"message".getBytes());
+    channel.basicPublish("", QUEUE_NAME, MessageProperties.PERSISTENT_TEXT_PLAIN, message.getBytes());
     closeMQ();
   }
 
@@ -39,9 +39,7 @@ public class MessageQueueService {
     Consumer consumer = new DefaultConsumer(channel) {
       @Override
       public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body)
-              throws IOException {
-        String message = new String(body, "UTF-8");
-      }
+              throws IOException {}
     };
     channel.basicConsume(QUEUE_NAME, true, consumer);
     closeMQ();
@@ -73,9 +71,10 @@ public class MessageQueueService {
     connection.close();
   }
 
-  public void sendTask(String task) throws Exception {
+  public void sendTask(long id) throws Exception {
     SendThumbnailTask sendThumbnailTask = new SendThumbnailTask();
-    sendThumbnailTask.sendTask(task);
+    String fileName = imageDataRepository.findOne(id).getUniqueName();
+    sendThumbnailTask.sendTask(fileName);
   }
 
   public void receiveTask() throws Exception {

@@ -48,17 +48,8 @@ public class ImageUploadRestController {
 
   @PostMapping(value="/media/images/{id}", headers="content-type=multipart/*")
   public ImageResponse getFile(@RequestParam("fileName") MultipartFile file, @PathVariable long id) throws Exception{
-    return imageService.createResponse(file, id);
-  }
-
-  @GetMapping("/in")
-  public String sendTask(@RequestParam("text") String text) throws Exception {
-    messageQueueService.sendTask(text);
-    return "ok";
-  }
-
-  @GetMapping("/out")
-  public void receiveTask() throws Exception {
-    messageQueueService.receiveTask();
+    ImageResponse imageResponse = imageService.createResponse(file, id);
+    messageQueueService.sendTask(id);
+    return imageResponse;
   }
 }

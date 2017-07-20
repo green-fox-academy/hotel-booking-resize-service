@@ -34,7 +34,6 @@ public class ReceiveThumbnailTask {
         } catch (Exception e) {
           e.printStackTrace();
         } finally {
-          System.out.println(" [x] Done");
           channel.basicAck(envelope.getDeliveryTag(), false);
           try {
             closeMQ(connection, channel);
